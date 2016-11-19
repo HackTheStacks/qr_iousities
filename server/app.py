@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import sys
 import logging
 import json
 import sqlite3
@@ -17,7 +16,7 @@ def get_artifact():
     long_url = None
     if 'longUrl' in data:
         long_url = data['longUrl']
-        
+
     res = json.dumps(data)
     return res
 
