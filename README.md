@@ -21,7 +21,7 @@ Before development, load the environment:
 
 In the development environment:
 ```
-pip install -r requirements.tt
+pip install -r requirements.txt
 ```
 
 ## Run
