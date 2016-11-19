@@ -1,0 +1,17 @@
+#!/bin/bash
+set -euo pipefail
+
+cd $(cd `dirname "$0"`; cd ..; pwd)
+
+INVENV=$(python -c 'import sys; print ("1" if hasattr(sys, "real_prefix") else "0")')
+if [ $INVENV -eq 0 ]; then
+    echo "Must be in the virtual environment; see README.md."
+    exit 1
+fi
+
+# Set application's environment variables
+export FLASK_DEBUG=1
+export FLASK_APP=app.py
+
+# Start the app
+python -m flask run

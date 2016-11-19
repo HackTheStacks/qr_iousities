@@ -2,21 +2,32 @@
 
 # Server
 
+Flask documentation: http://flask.pocoo.org/docs/0.11/quickstart/
+
+## Development environment
+
+Install the development environment on your machine:
+```
+$ pip install virtualenv
+$ virtualenv venv
+```
+
+Before development, load the environment:
+```
+$ . venv/bin/activate
+```
+
 ## Install
 
+In the development environment:
 ```
-pip install virtualenv
-virtualenv venv
-. venv/bin/activate
+$ server/bin/install
 ```
-
-Flask documentation: http://flask.pocoo.org/docs/0.11/quickstart/
 
 ## Run
 
 ```
-export FLASK_APP=server/app.py
-python -m flask run
+$ server/bin/run
 ```
 
 Go to: http://127.0.0.1:5000/
