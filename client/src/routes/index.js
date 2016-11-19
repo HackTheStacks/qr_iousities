@@ -14,8 +14,8 @@ const importHome = (nextState, cb) => {
     .catch((e) => { throw e; });
 };
 
-const importTools = (nextState, cb) => {
-  System.import('../components/Tools')
+const importCreate = (nextState, cb) => {
+  System.import('../components/Create')
     .then(module => cb(null, module.default))
     .catch((e) => { throw e; });
 };
@@ -25,7 +25,7 @@ const importTools = (nextState, cb) => {
 const routes = (
   <Route path="/" component={App}>
     <IndexRoute getComponent={importHome} />
-    <Route path="tools" getComponent={importTools} />
+      <Route path="create" getComponent={importCreate} />
   </Route>
 );
 
@@ -34,7 +34,7 @@ const routes = (
 // https://github.com/gaearon/react-hot-loader/issues/288
 if (module.hot) {
   require('../components/Home');    // eslint-disable-line global-require
-  require('../components/Tools');   // eslint-disable-line global-require
+  require('../components/Create');
 }
 
 export default routes;
