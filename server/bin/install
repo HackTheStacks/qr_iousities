@@ -9,9 +9,5 @@ if [ $INVENV -eq 0 ]; then
     exit 1
 fi
 
-# Set application's environment variables
-export FLASK_DEBUG=1
-export FLASK_APP=app.py
-
-# Start the app
-python -m flask run
+# Install the app's dependencies
+pip install -r requirements.txt
