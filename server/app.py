@@ -7,6 +7,10 @@ import sqlite3
 from flask import Flask ,redirect, request
 app = Flask(__name__)
 
+@app.route("/")
+def home():
+    return 'Redirect to front-end!'
+
 @app.route("/get_artifact", methods=["GET", "POST", "OPTIONS"])
 def get_artifact():
     """
