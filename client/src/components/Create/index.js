@@ -4,14 +4,19 @@ import React from 'react';
 
 function create() {
 
-  handleOnSubmit = () => {
-    return;
+  handleOnSubmit = (artifactUrl) => {
+    axios.post('/get_artifact', {
+      longUrl: artifactUrl
+    })
+      .then((data) => {
+          console.log(data);
+      });
   };
 
   return (
     <section>
       <h1> Search </h1>
-      <input type="text" className="searchBar" onSubmit={this.handleOnSubmit} />
+      <input type="text" className="searchBar" onSubmit={(artifactUrl) => this.handleOnSubmit} />
     </section>
   );
 }
