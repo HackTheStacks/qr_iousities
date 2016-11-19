@@ -1,2 +1,5 @@
 logs
 node_modules
+
+*.pyc
+venv/
