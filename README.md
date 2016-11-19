@@ -6,22 +6,22 @@ Flask documentation: http://flask.pocoo.org/docs/0.11/quickstart/
 
 ## Development environment
 
-Install the development environment:
+Install the development environment on your machine:
 ```
-pip install virtualenv
-virtualenv venv
+$ pip install virtualenv
+$ virtualenv venv
 ```
 
 Before development, load the environment:
 ```
-. venv/bin/activate
+$ . venv/bin/activate
 ```
 
 ## Install
 
 In the development environment:
 ```
-pip install -r requirements.tt
+$ server/bin/install
 ```
 
 ## Run
