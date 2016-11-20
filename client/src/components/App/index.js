@@ -6,7 +6,10 @@ import styles from './styles.scss';
 function App({ children }) {
   return (
     <div className={styles.content}>
-      {children}
+        <div className={styles.header}>
+            QRiousities
+        </div>
+        {children}
     </div>
   );
 }

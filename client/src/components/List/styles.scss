@@ -1,6 +1,22 @@
 
 @import '../../shared-styles/variables';
 
-.paragraph + .paragraph {
-  padding-top: $padding;
+.container {
+}
+
+.header {
+    composes: row from '../../shared-styles/tables.scss';
+    background: #CDCEA9;
+}
+
+.name, .qrcode, .shortUrl, .url, .delete {
+    composes: column from '../../shared-styles/tables.scss';
+
+    text-transform: uppercase;
+    color: #585832;
+    font-size: 12px;
+}
+
+.delete {
+    text-align: center;
 }
