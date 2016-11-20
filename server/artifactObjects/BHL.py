@@ -15,10 +15,13 @@ class BHLObject(baseArtifact):
             return False
 
     def parseID(self,url):
-        """Parse out Item ID from URL"""
-        splitURL = (url).split("/")
-        itemID = splitURL[4].split('#')[0]
-        return itemID
+	"""Parse out Item ID from URL"""
+	if validateUrl(url):
+	  splitURL = (url).split("/")
+	  itemID = splitURL[4].split('#')[0]
+	else:
+	  return "URL not valid"
+	return itemID
 
     def getArtifactData(self, itemID):
         """Based on Item ID, fetch artifact info from either our database or a museum API"""

@@ -8,6 +8,7 @@ import os
 import cStringIO
 import base64
 import sys
+from shortener import Shortener
 
 from flask import Flask, redirect, request, Response
 from database import DB
@@ -38,11 +39,11 @@ def get_artifact():
     artifact = {}
     content = ""
     long_url = None
-    if not data == None and 'longUrl' in data:
-        long_url = data['longUrl']
-        if bhl.validateUrl(long_url):
-            url = (long_url,)
-            item = db.query('SELECT * FROM items WHERE LongUrl=?', url, True)
+    if not data == None and 'itemUrl' in data:
+        item_url = data['itemUrl']
+        if bhl.validateUrl(item_url):
+	    item_id = (bhl.parseID(item_url,)
+            item = db.query('SELECT * FROM items WHERE LongUrl=?', item_id, True)
             if not item == None:
                 artifact['Id'] = item[0]
                 artifact['ItemID'] = item[1]
@@ -53,12 +54,13 @@ def get_artifact():
 
                 content = artifact
             else:
-                itemID = bhl.parseID(long_url)
-                [author, title, year] = bhl.getArtifactData(itemID)
-                descriptor = {}
-                descriptor['Author'] = author
-                descriptor['Year'] = year
-                item = db.query('INSERT INTO items ', url, False)
+		content = "Item not found"
+#                itemID = bhl.parseID(long_url)
+#                [author, title, year] = bhl.getArtifactData(itemID)
+#                descriptor = {}
+#                descriptor['Author'] = author
+#                descriptor['Year'] = year
+#                item = db.query('INSERT INTO items ', url, False)
         else:
             content = "Invalid URL"
 
@@ -99,11 +101,17 @@ def redirect_url(short_url):
 @app.route("/update_artifact", methods=["GET", "POST", "OPTIONS"])
 def update_artifact():
     data = request.get_json()
-    if not data == None and 'longUrl' in data:
+    if (not data == None) and ('longUrl' in data) and ('itemUrl' in data):
         long_url = data['longUrl']
-        short_url = data['shortUrl']
-
-    content = json.dumps(data)
+        itemId = bhl.parseId(data['itemUrl'])
+	(author, title, year) = bhl.getArtifactData(itemId)
+	descriptor = {}
+        descriptor['Author'] = author
+	descriptor['Year'] = year
+	short_url = shortener.id_to_short(itemId)
+	tableId = db.getNextTableID()
+	db.execute_cmd('INSERT INTO items VALUES (?,?,?,?,?,?)', (tableId, itemId, title, descriptor, short_url, long_url), 
+#    content = json.dumps(data)
 
     return json_resp(content)
 
@@ -137,19 +145,16 @@ def get_level(level):
     else:
         return logging.INFO
 
-
-
-
-def gen_qr_code(url):
+def gen_qr_code(shortUrl):
     """
     use qrcode library to generate qrcode
-    input: url (supposed to be the url from BHL)
+    input: shortUrl (URL which will be encoded in a QR code)
     output: img_object generate which represents the qrcode
     """
 
     factory = qrcode.image.svg.SvgImage
     qr = qrcode.QRCode(box_size=10, border=4, image_factory=factory,)
-    qr.add_data(url)
+    qr.add_data(shortUrl)
     qr.make(fit=True)
     img = qr.make_image()
 
@@ -157,14 +162,14 @@ def gen_qr_code(url):
 
 
 @app.route('/get_qrimg/<url>')
-def get_qrimg(url):
+def get_qrimg(itemUrl):
     """
     transfer QRcode to base64 format
     input: url (supposed to be the url from BHL)
     output: img_url which represents the qrcode
     """
     img_buf = cStringIO.StringIO()
-    img = gen_qr_code(url)
+    img = gen_qr_code(itemUrl)
     img.save(img_buf)
     im_data = img_buf.getvalue()
     data_url = 'data:image/svg+xml;base64,' + base64.encodestring(im_data)
