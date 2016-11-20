@@ -1,6 +1,58 @@
 
 @import '../../shared-styles/variables';
 
-.paragraph + .paragraph {
-  padding-top: $padding;
+.searchInputContainer {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+}
+
+.instructions, .error, .success {
+  background-color: #C2C597;
+  font-size: 0.9em;
+  padding: 15px;
+  margin: 10px 0;
+}
+
+.success {
+  background-color: #22C23B;
+}
+
+.error {
+  background-color: #c23b22;
+  color: white;
+}
+
+.errorMessage {
+  font-weight: 700;
+}
+
+.errorItem {
+  margin: 8px 5px;
+  
+}
+
+.searchInput, .searchButton {
+  padding: 10px;
+  border: 0;
+  outline: 0;
+}
+
+.searchInput {
+  flex: 50%;
+}
+
+.searchButton {
+  cursor: pointer;
+  border: 0;
+  flex: 20%;
+  color: white;
+  background-color: #0031A8;
+  transition: 0.3s;
+  text-transform: uppercase;
+  font-size: 0.9em;
+}
+
+.searchButton:hover {
+  background-color: #002684;
 }
