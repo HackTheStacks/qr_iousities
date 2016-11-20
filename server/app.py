@@ -23,10 +23,10 @@ def home():
 
 @app.route("/get_artifact", methods=["GET", "POST", "OPTIONS"])
 def get_artifact():
-    data = request.json
+    data = request.get_json()
     artifact = {}
     long_url = None
-    if 'longUrl' in data:
+    if not data == None and 'longUrl' in data:
         long_url = data['longUrl']
         conn = sqlite3.connect('database.db')
         c = conn.cursor()
@@ -89,8 +89,8 @@ def redirect_url(short_url):
 
 @app.route("/update_artifact", methods=["GET", "POST", "OPTIONS"])
 def update_artifact():
-    data = request.json
-    if 'longUrl' in data:
+    data = request.get_json()
+    if not data == None and 'longUrl' in data:
         long_url = data['longUrl']
         short_url = data['shortUrl']
 
