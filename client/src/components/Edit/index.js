@@ -65,7 +65,7 @@ class Create extends React.Component {
   handleOnSubmit(event) {
     event.preventDefault();
     axios.post(`${config.apiUrl}/update_artifact`, {
-      itemId: this.props.params.itemId,
+      itemUrl: this.props.params.itemId,
       longUrl: this.state.longUrl
     })
     .then((data) => {
@@ -110,7 +110,7 @@ class Create extends React.Component {
         <h1>Manage</h1>
         {this.state.artifact ? this.displayArtifact() : null}
         <form onSubmit={this.handleOnSubmit}>
-          <div>Please input the new url the QA code that item: {this.props.params.itemId} will redirect to</div>
+          <div>Please input the new url the QR code that item: {this.props.params.itemId} will redirect to</div>
           <br />
           <div className={styles.searchInputContainer}>
             <input className={styles.searchInput} type="text" value={this.state.LongUrl} onChange={this.handleOnChange} />
