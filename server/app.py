@@ -47,7 +47,9 @@ def get_all_artifacts():
 
 @app.route("/s/<short_url>", methods=["GET", "POST", "OPTIONS"])
 def redirect_url(short_url):
-    return redirect("http://www.cnn.com/")
+    """ Lookup long url from the short url and redirect the user """
+    return redirect(location="http://google.com", code=302)
+
 
 @app.route("/update_artifact", methods=["GET", "POST", "OPTIONS"])
 def update_artifact():
