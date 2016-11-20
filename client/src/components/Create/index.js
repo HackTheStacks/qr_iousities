@@ -7,7 +7,7 @@ import styles from './styles.scss';
 
 const FORMATS_BY_TYPE = {
     BHL: {
-        regex: new RegExp('http://www.biodiversitylibrary.org/page'),
+        regex: new RegExp('https://www.biodiversitylibrary.org/item'),
         examples: [
             'https://www.biodiversitylibrary.org/item/16800',
             'https://www.biodiversitylibrary.org/item/16800#page/5/mode/1up'
@@ -100,6 +100,9 @@ class Create extends React.Component {
     );
   }
 
+  getQRCode() {
+  }
+
     render() {
         let message;
         switch(this.state.status) {
@@ -122,7 +125,7 @@ class Create extends React.Component {
                 <input type="submit" value="Save" className={styles.searchButton}/>
               </div>
           </form>
-          {this.state.artifact ? this.handleResults : null}
+          {this.getQRCode()}
         </section>
     );
   }
