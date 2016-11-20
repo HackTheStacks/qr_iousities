@@ -19,6 +19,14 @@ db = DB()
 # def close_connection(exception):
     # db.close_connection(exception)
 
+def json_resp(content):
+    resp = Response(content, mimetype='application/json')
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    resp.headers['Access-Control-Allow-Method'] = 'GET, POST, OPTIONS'
+    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+
+    return resp
+
 @app.route("/")
 def home():
     return 'Redirect to front-end!'
