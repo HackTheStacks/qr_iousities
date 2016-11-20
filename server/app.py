@@ -180,20 +180,18 @@ def get_qrimg(url):
     input: url (supposed to be the url from BHL)
     output: img_url which represents the qrcode
     """
-    img_buf = cStringIO.StringIO()
-    check = db.query("SELECT qrcode_base FROM qrcode WHERE shortUrl = ?",url)
+    check = db.query("SELECT qrcode_base FROM qrcode WHERE shortUrl=?",(url,),True)
 
     if check == None:
-        print "i dont have value"
         img = gen_qr_code(url)
+        img_buf = cStringIO.StringIO()
         img.save(img_buf)
         im_data = img_buf.getvalue()
         data_url = 'data:image/svg+xml;base64,' + base64.encodestring(im_data)
         content = json.dumps(data_url.strip())
         db.query("INSERT OR IGNORE INTO qrcode(shortUrl, qrcode_base) VALUES(?, ?)",(url,content))
     else:
-        content = check[0]
-        print content
+        content = check
 
     resp = Response(content, mimetype='application/json')
     resp.headers['Access-Control-Allow-Origin'] = '*'
