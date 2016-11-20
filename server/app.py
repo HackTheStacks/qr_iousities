@@ -110,7 +110,7 @@ def gen_qr_code(url):
     qr.add_data(url)
     qr.make(fit=True)
     img = qr.make_image()
-
+    
     return img
 
 @app.route('/get_qrimg/<url>')
@@ -145,10 +145,6 @@ def get_qrimg(url):
     resp.headers['Access-Control-Allow-Method'] = 'GET, OPTIONS'
     resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
     return resp
-
-
-
-
 
 
 if __name__ == '__main__':
