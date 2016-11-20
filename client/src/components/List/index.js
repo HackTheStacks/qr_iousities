@@ -20,17 +20,16 @@ class List extends React.Component {
         };
     }
     componentWillMount() {
-        /*axios
+        axios
             .get(`${config.apiUrl}/???`)
             .then(resp => {
                 this.setState({artifacts: resp});
             });
-        */
     }
 
     onDelete(id) {
         axios
-            .delete(`${config.apiUrl}/???/${id}`)
+            .delete(`${config.apiUrl}//${id}`)
             .then(resp => {
                 //TODO remove state
             });

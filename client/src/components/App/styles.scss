@@ -2,12 +2,21 @@
 @import '../../shared-styles/variables';
 
 .header {
-  text-align: center;
   font-size: 2em;
   margin-bottom: 20px;
+  background-color: #113991;
+  color: white;
+  padding: 5px;
 }
 
 .content {
   width: $content-width;
   margin: $padding auto;
+}
+
+.logo {
+  background: url('../../images/logo.png');
+  height: 80px;
+  width: 433px;
+  display: inline-block;
 }

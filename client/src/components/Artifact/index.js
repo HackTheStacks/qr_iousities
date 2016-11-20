@@ -10,7 +10,7 @@ class Artifact extends Component {
                 <div className={styles.qrcode}>{this.props.qrcode}</div>
                 <div className={styles.shortUrl}>{this.props.shortUrl}</div>
                 <div className={styles.url}>{this.props.url}</div>
-                <div className={styles.delete} onClick={this.props.onDelete}>DESTROY</div>
+                <div className={styles.delete} onClick={this.props.onDelete}>×</div>
             </div>
         );
     }
