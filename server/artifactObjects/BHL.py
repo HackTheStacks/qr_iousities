@@ -18,7 +18,7 @@ class BHLObject(baseArtifact):
 	"""Parse out Item ID from URL"""
 	if validateUrl(url):
 	  splitURL = (url).split("/")
-	  itemID = splitURL[4].split('#')[0]
+	  itemID = "BHL-" + splitURL[4].split('#')[0]
 	else:
 	  return "URL not valid"
 	return itemID
