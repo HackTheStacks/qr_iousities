@@ -14,18 +14,25 @@ const importList = (nextState, cb) => {
     .catch((e) => { throw e; });
 };
 
-const importManage = (nextState, cb) => {
-  System.import('../components/Manage')
+const importCreate = (nextState, cb) => {
+  System.import('../components/Create')
     .then(module => cb(null, module.default))
     .catch((e) => { throw e; });
 };
+
+const importEdit = (nextState, cb) => {
+  System.import('../components/Edit')
+    .then(module => cb(null, module.default))
+    .catch((e) => { throw e; });
+}
 
 // We use `getComponent` to dynamically load routes.
 // https://github.com/reactjs/react-router/blob/master/docs/guides/DynamicRouting.md
 const routes = (
   <Route path="/" component={App}>
     <IndexRoute getComponent={importList} />
-    <Route path="manage" getComponent={importManage} />
+    <Route path="create" getComponent={importCreate} />
+    <Route path="edit/:id" getComponent={importEdit} />
   </Route>
 );
 
@@ -34,7 +41,8 @@ const routes = (
 // https://github.com/gaearon/react-hot-loader/issues/288
 if (module.hot) {
   require('../components/List');    // eslint-disable-line global-require
-  require('../components/Manage');
+  require('../components/Create');
+  require('../components/Edit');
 }
 
 export default routes;

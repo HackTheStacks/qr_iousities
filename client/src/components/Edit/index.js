@@ -1,35 +1,27 @@
 
-import React from 'react';
+import React, {PropTypes} from 'react';
 import {Link} from 'react-router';
 import axios from 'axios';
 import config from '../../config';
 // import styles from './styles.scss';
 
-class Manage extends React.Component {
+class Edit extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       artifactUrl: 'something',
-      artifact: null,
-      type: ''
+      isArtifactUrlChanged: false
     };
 
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
     this.handleOnChange = this.handleOnChange.bind(this);
-    this.handleClickDropdown = this.handleClickDropdown.bind(this);
   }
 
   handleOnChange(event) {
     this.setState({
       artifactUrl: event.target.value
     });
-  }
-
-  handleClickDropdown(event) {
-    this.setState({
-      type: event.target.value
-    })
   }
 
   handleOnSubmit(event) {
@@ -50,7 +42,7 @@ class Manage extends React.Component {
   };
 
 
-  handleResults() {
+  handleResult() {
     console.log('results');
     return (
       <div>{this.state.artifactUrl}</div>
@@ -63,16 +55,22 @@ class Manage extends React.Component {
           <Link to="/"><button>Return to home</button></Link>
           <h1>Search</h1>
           <form onSubmit={this.handleOnSubmit}>
-            <div>Please input the artifact you would like to find as a url.</div>
-            <select onChange={this.handleClickDropdown} value={this.state.type}>
-              <option value="BHL">BHL</option>
-            </select>
+            <div>Please input the url that you would update the QR code to:</div>
             <input type="text" value={this.state.artifactUrl} onChange={this.handleOnChange} className="searchBar" />
-            <input type="submit" value="Search"/>
+            <input type="submit" value="Update"/>
           </form>
-          {this.state.artifact ? this.handleResults : null}
+          {this.state.isArtifactUrlChanged ? this.handleResult : null}
         </section>
     );
   }
 }
-export default Manage;
+
+Edit.defaultProps = {
+  id: null
+};
+
+Edit.propTypes = {
+  id: PropTypes.string
+};
+
+export default Edit;

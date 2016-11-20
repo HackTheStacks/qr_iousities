@@ -23,9 +23,10 @@ class List extends React.Component {
             }]
         };
     }
+    
     componentWillMount() {
         axios
-            .get(`${config.apiUrl}/???`)
+            .get(`${config.apiUrl}/get_all_artifacts`)
             .then(resp => {
                 this.setState({artifacts: resp});
             });
@@ -33,7 +34,7 @@ class List extends React.Component {
 
     onDelete(id) {
         axios
-            .delete(`${config.apiUrl}//${id}`)
+            .delete(`${config.apiUrl}/???`)
             .then(resp => {
                 //TODO remove state
             });
@@ -41,7 +42,9 @@ class List extends React.Component {
 
     render() {
         const artifacts = this.state.artifacts.map(a => {
-            return <Artifact key={a.TableID} itemId={a.ItemID}
+            return <Artifact
+                key={a.TableID}
+                itemId={a.ItemID}
                 name={a.Name} descriptor={a.Descriptor}
                 shortUrl={a.ShortUrl}
                 url={a.LongUrl}
@@ -51,7 +54,7 @@ class List extends React.Component {
 
         return (
             <div className={styles.container}>
-              <Link to="/manage"><button>Create a new QA code</button></Link>
+              <Link to="/create"><button>Create a new QA code</button></Link>
                 <div className={styles.header}>
                     <div className={styles.name}>Name</div>
                     <div className={styles.qrcode}>QR Code</div>
