@@ -60,29 +60,29 @@ class Create extends React.Component {
         return;
     }
 
-    this.setState({
-      status: 'success',
-      artifact: {
-        shortUrl: 'BHL-002'
-      },
-      itemId: 'BHL-002'
-    });
-      this.getQRCode();
-
-    // axios.post(`${config.apiUrl}/create_artifact`, {
-    //   itemId: this.state.itemId,
-    //   longUrl: this.state.artifactUrl
-    // })
-    // .then((resp) => {
-    //   this.setState({
-    //       artifact: resp.data,
-    //       status: 'success'
-    //   });
+    // this.setState({
+    //   status: 'success',
+    //   artifact: {
+    //     shortUrl: 'BHL-002'
+    //   },
+    //   itemId: 'BHL-002'
+    // });
     //   this.getQRCode();
-    // })
-    // .catch((err) => {
-    //   console.log(err);
-    // })
+
+    axios.post(`${config.apiUrl}/create_artifact`, {
+      itemId: this.state.itemId,
+      longUrl: this.state.artifactUrl
+    })
+    .then((resp) => {
+      this.setState({
+          artifact: resp.data,
+          status: 'success'
+      });
+      this.getQRCode();
+    })
+    .catch((err) => {
+      console.log(err);
+    })
   }
 
   getSuccessMessage() {
