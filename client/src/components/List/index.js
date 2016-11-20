@@ -23,7 +23,7 @@ class List extends React.Component {
             }]
         };
     }
-    
+
     componentWillMount() {
         axios
             .get(`${config.apiUrl}/get_all_artifacts`)
@@ -41,30 +41,37 @@ class List extends React.Component {
     }
 
     render() {
-        const artifacts = this.state.artifacts.map(a => {
-            return <Artifact
+      let artifacts = ''
+      if (this.state.artifacts) {
+        artifacts = this.state.artifacts.map(a => {
+            return (
+              <Artifact
                 key={a.TableID}
+                id={a.TableID}
                 itemId={a.ItemID}
-                name={a.Name} descriptor={a.Descriptor}
+                name={a.Name}
+                descriptor={a.Descriptor}
                 shortUrl={a.ShortUrl}
                 url={a.LongUrl}
                 onDelete={id => this.onDelete(a.TableID)}
-                />
+              />
+            )
         });
+      }
 
-        return (
-            <div className={styles.container}>
-              <Link to="/create"><button>Create a new QA code</button></Link>
-                <div className={styles.header}>
-                    <div className={styles.name}>Name</div>
-                    <div className={styles.qrcode}>QR Code</div>
-                    <div className={styles.url}>URL</div>
-                    <div className={styles.shortUrl}>Short URL</div>
-                    <div className={styles.delete}>Delete</div>
-                </div>
-                {artifacts}
-            </div>
-        );
+      return (
+          <div className={styles.container}>
+            <Link to="/create"><button>Create a new QA code</button></Link>
+              <div className={styles.header}>
+                  <div className={styles.name}>Name</div>
+                  <div className={styles.qrcode}>QR Code</div>
+                  <div className={styles.url}>URL</div>
+                  <div className={styles.shortUrl}>Short URL</div>
+                  <div className={styles.delete}>Delete</div>
+              </div>
+              {artifacts}
+          </div>
+      );
     }
 }
 

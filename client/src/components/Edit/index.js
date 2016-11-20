@@ -27,7 +27,7 @@ class Edit extends React.Component {
   handleOnSubmit(event) {
     event.preventDefault();
 
-    axios.post(`${config.apiUrl}/get_artifact`, {
+    axios.post(`${config.apiUrl}/update_artifact`, {
       longUrl: this.state.artifactUrl
     })
     .then((data) => {
