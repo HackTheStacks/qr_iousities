@@ -1,12 +1,14 @@
 from artifactInterface import baseArtifact
 import os
 import urllib2
+import re
 
 class BHLObject(baseArtifact):
 
     def validateUrl(self, url):
         """Validate user input as valid URL for a BHL artifact."""
-        if pattern.match("https?://www.biodiversitylibrary.org/(page|item)/[0-9]*"):
+        pattern = re.compile("https?://www.biodiversitylibrary.org/(page|item)/[0-9]*")
+        if pattern.match(url):
             self.url = url
             return True
         else:
