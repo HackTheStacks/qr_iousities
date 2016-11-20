@@ -48,7 +48,12 @@ def get_all_artifacts():
 @app.route("/s/<short_url>", methods=["GET", "POST", "OPTIONS"])
 def redirect_url(short_url):
     """ Lookup long url from the short url and redirect the user """
-    return redirect(location="http://google.com", code=302)
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    url = (short_url,)
+    c.execute('SELECT LongUrl FROM items WHERE ShortUrl=?' , url)
+    response = c.fetchone()
+    return redirect(location=response[0], code=302)
 
 
 @app.route("/update_artifact", methods=["GET", "POST", "OPTIONS"])
