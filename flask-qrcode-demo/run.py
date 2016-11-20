@@ -7,6 +7,7 @@ except:
     from StringIO import StringIO
 
 import qrcode
+import qrcode.image.svg
 from flask import Flask, send_file, request
 
 app = Flask(__name__)
@@ -42,7 +43,8 @@ def gen_qr_code():
     box_size = int(size)/27
     qr = qrcode.QRCode(
         version=version,
-        error_correction=ECL_DICT.get(ecl.upper(), qrcode.constants.ERROR_CORRECT_H),
+        error_correction = qrcode.constants.ERROR_CORRECT_L,
+        # error_correction=ECL_DICT.get(ecl.upper(), qrcode.constants.ERROR_CORRECT_H),
         box_size=box_size,
         border=border,
     )
@@ -51,7 +53,7 @@ def gen_qr_code():
     img = qr.make_image()
 
     output = StringIO()
-    img.save(output, "PNG")
+    img.save(output, qrcode.image.svg.SvgImage)
     output.seek(0)
 
     return send_file(output, mimetype='image/png')
