@@ -24,10 +24,14 @@
     "enzyme": "^2.4.1",
     "express": "^4.14.0",
     "kyt": "^0.3.0",
+    "lodash": "^4.17.2",
     "querystring": "^0.2.0",
     "react": "^15.3.0",
+    "react-chartjs": "^0.8.0",
+    "react-d3": "^0.4.0",
     "react-dom": "^15.3.0",
     "react-router": "^2.6.1",
+    "recharts": "^0.18.0",
     "superagent": "^2.3.0"
   },
   "devDependencies": {
