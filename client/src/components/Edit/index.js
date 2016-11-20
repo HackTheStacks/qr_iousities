@@ -1,79 +1,64 @@
 
-import React, {PropTypes} from 'react';
+import React from 'react';
 import {Link} from 'react-router';
 import axios from 'axios';
 import config from '../../config';
 // import styles from './styles.scss';
 
-class Edit extends React.Component {
+class Create extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      artifactUrl: '',
-      artifact: {
-          Id: 1,
-          ItemID: 'Something_1',
-          Title: 'Artifact',
-          Descriptor: 'Something something something',
-          ShortUrl: 'https://here.com',
-          LongUrl: 'https://nytimes.com'
-      },
-      isArtifactUrlChanged: false
+      longUrl: '',
+      artifact: null,
     };
 
+    this.handleOnSubmit = this.handleOnSubmit.bind(this);
     this.handleOnChange = this.handleOnChange.bind(this);
-    this.handleOnUpdate = this.handleOnUpdate.bind(this);
-    this.handleGetQRCode = this.handleGetQRCode.bind(this);
   }
 
   componentWillMount() {
     axios.post(`${config.apiUrl}/get_artifact`, {
-      longUrl: this.state.artifactUrl
+      itemId: this.props.params.itemId
     })
     .then((data) => {
       this.setState({
         artifact: data
-      });
+      })
     })
     .catch((err) => {
       console.log(err);
     })
   }
 
-  handleOnChange(event){
+  handleOnChange(event) {
     this.setState({
-      artifactUrl: event.target.value,
-      isArtifactUrlChanged: true
+      longUrl: event.target.value
     });
   }
 
-  handleOnUpdate(){
+  handleOnSubmit(event) {
     event.preventDefault();
     axios.post(`${config.apiUrl}/update_artifact`, {
-      longUrl: this.state.artifactUrl
+      itemId: this.props.params.itemId,
+      longUrl: this.state.longUrl
     })
     .then((data) => {
-      this.handleResult(data);
+      this.setState({
+        artifact: data
+      })
     })
     .catch((err) => {
       console.log(err);
     })
-  }
+  };
 
-  handleGetQRCode() {
-    axios.post(`${config.apiUrl}/get_qrimg/${this.state.artifact.longUrl}`)
-      .then((data) => {
-        <div>data</div>
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-  }
 
-  handleResults(data) {
+  handleResults() {
+    console.log('results');
     return (
-      <div>data</div>
+      <div>{this.state.artifact}</div>
     );
   }
 
@@ -81,29 +66,15 @@ class Edit extends React.Component {
       return (
         <section>
           <Link to="/"><button>Return to home</button></Link>
-          <h1>{this.state.artifact.Title}</h1>
-          <div>
-            URL:
-            <input type="text" value={this.state.artifact.LongUrl} onChange={this.handleOnChange} />
-          </div>
-          {this.state.isArtifactUrlChanged ? <button onSubmit={this.handleOnUpdate}>Update</button> : null}
-          <div>
-            short URL: {this.state.artifact.ShortUrl}
-          </div>
-          <div>{this.handleGetQRCode}</div>
-          <button>Delete</button>
-          <button>Print</button>
+          <h1>Search</h1>
+          <form onSubmit={this.handleOnSubmit}>
+            <div>Please input the new url the QA code that item: {this.props.params.itemId} will redirect to</div>
+            <input type="text" value={this.state.LongUrl} onChange={this.handleOnChange} className="searchBar" />
+            <input type="submit" value="Search"/>
+          </form>
+          {this.state.artifact ? this.handleResults : null}
         </section>
     );
   }
 }
-
-Edit.defaultProps = {
-  id: null
-};
-
-Edit.propTypes = {
-  id: PropTypes.string
-};
-
-export default Edit;
+export default Create;
