@@ -43,7 +43,7 @@ def get_artifact():
         item_url = data['itemUrl']
         if bhl.validateUrl(item_url):
 	    item_id = (bhl.parseID(item_url,)
-            item = db.query('SELECT * FROM items WHERE LongUrl=?', item_id, True)
+            item = db.query('SELECT * FROM items WHERE ItemID=?', item_id, True)
             if not item == None:
                 artifact['tableId'] = item[0]
                 artifact['itemId'] = item[1]
@@ -95,6 +95,26 @@ def redirect_url(short_url):
 
 
 @app.route("/update_artifact", methods=["GET", "POST", "OPTIONS"])
+def create_artifact():
+    data = request.get_json()
+    if (not data == None) and ('longUrl' in data) and ('itemUrl' in data):
+	long_url = data['longUrl']
+	itemId = ""
+	title = ""
+	descriptor = ""
+
+	if bhl.validateUrl(item_url):
+	    itemId = bhl.parseId(data['itemUrl'])
+	    (author, title, year) = bhl.getArtifactData(itemId)
+	    descriptor = {}
+	    descriptor['author'] = author
+	    descriptor['year'] = year
+	short_url = shortener.id_to_short(itemId)
+	tableId = db.getNextTableID()
+	db.execute_cmd('INSERT INTO items VALUES (?,?,?,?,?,?)', (tableId, itemId, title, descriptor, short_url, long_url), 
+    return json_resp(content)
+
+@app.route("/update_artifact", methods=["GET", "POST", "OPTIONS"])
 def update_artifact():
     data = request.get_json()
     if (not data == None) and ('longUrl' in data) and ('itemUrl' in data):
@@ -104,15 +124,11 @@ def update_artifact():
 	descriptor = ""
 
 	if bhl.validateUrl(item_url):
-	  itemId = bhl.parseId(data['itemUrl'])
-	  (author, title, year) = bhl.getArtifactData(itemId)
-	  descriptor = {}
-	  descriptor['author'] = author
-	  descriptor['year'] = year
+	    itemId = bhl.parseId(data['itemUrl'])
 	short_url = shortener.id_to_short(itemId)
-	tableId = db.getNextTableID()
-	db.execute_cmd('INSERT INTO items VALUES (?,?,?,?,?,?)', (tableId, itemId, title, descriptor, short_url, long_url), 
+	db.execute_cmd('UPDATE items SET LongUrl = ? WHERE ItemID = ?', (long_url,itemId)) 
     return json_resp(content)
+
 
 @app.route("/delete_artifact", methods=["GET", "POST", "OPTIONS"])
 def delete_artifact():
