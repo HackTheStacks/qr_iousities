@@ -5,7 +5,7 @@ import json
 import sqlite3
 import os
 
-from flask import Flask ,redirect, request
+from flask import Flask, redirect, request, Response
 app = Flask(__name__)
 
 @app.route("/")
@@ -21,9 +21,13 @@ def get_artifact():
     long_url = None
     if 'longUrl' in data:
         long_url = data['longUrl']
+    content = json.dumps(data)
 
-    res = json.dumps(data)
-    return res
+    resp = Response(content, mimetype='application/json')
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    resp.headers['Access-Control-Allow-Method'] = 'GET, OPTIONS'
+    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    return resp
 
 @app.route("/get_all_artifacts", methods=["GET", "OPTIONS"])
 def get_all_artifacts():
@@ -31,11 +35,19 @@ def get_all_artifacts():
     c = conn.cursor()
     c.execute('SELECT * FROM items')
     response = c.fetchone()
-    return json.dumps(response)
+
+    content = json.dumps(response)
+
+    resp = Response(content, mimetype='application/json')
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    resp.headers['Access-Control-Allow-Method'] = 'GET, OPTIONS'
+    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+
+    return resp
 
 @app.route("/s/<short_url>", methods=["GET", "POST", "OPTIONS"])
-def redirect(short_url):
-    return redirect(short_url, code=302)
+def redirect_url(short_url):
+    return redirect("http://www.cnn.com/")
 
 @app.route("/update_artifact", methods=["GET", "POST", "OPTIONS"])
 def update_artifact():
@@ -46,8 +58,15 @@ def update_artifact():
     if 'longUrl' in data:
         long_url = data['longUrl']
         short_url = data['shortUrl']
-    res = json.dumps(data)
-    return res
+
+    content = json.dumps(data)
+
+    resp = Response(content, mimetype='application/json')
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    resp.headers['Access-Control-Allow-Method'] = 'GET, OPTIONS'
+    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+
+    return resp
 
 def get_level(level):
     if level == 'CRITICAL':
