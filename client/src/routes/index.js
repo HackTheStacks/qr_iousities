@@ -33,9 +33,8 @@ const routes = (
 // routes so we need to require them here as a workaround.
 // https://github.com/gaearon/react-hot-loader/issues/288
 if (module.hot) {
-  require('../components/Home');    // eslint-disable-line global-require
-  require('../components/Create');
   require('../components/List');    // eslint-disable-line global-require
+  require('../components/Create');
 }
 
 export default routes;

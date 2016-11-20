@@ -5,10 +5,8 @@ import styles from './styles.scss';
 
 function App({ children }) {
   return (
-    <div>
-      <div className={styles.content}>
-        {children}
-      </div>
+    <div className={styles.content}>
+      {children}
     </div>
   );
 }

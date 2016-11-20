@@ -3,13 +3,20 @@ import React from 'react';
 import styles from './styles.scss';
 import Artifact from '../Artifact';
 import axios from 'axios';
+import config from '../../config';
 
 class List extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            artifacts: []
+        };
+    }
     componentWillMount() {
         axios
             .get(`${config.apiUrl}/???`)
             .then(resp => {
-                this.setState(resp);
+                this.setState({artifacts: resp});
             });
     }
 
