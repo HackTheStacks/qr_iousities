@@ -10,6 +10,7 @@ import json
 import sqlite3
 import os
 import cStringIO
+import base64
 
 from flask import Flask, redirect, request, Response
 from flask import send_file
@@ -92,7 +93,6 @@ def get_level(level):
 
 
 
-@app.route('/get_qrimg')
 
 def gen_qr_code(url):
     """
@@ -102,8 +102,7 @@ def gen_qr_code(url):
     """
 
     factory = qrcode.image.svg.SvgImage
-    qr = qrcode.QRCode(box_size=10,
-            der=4,image_factory=factory,)
+    qr = qrcode.QRCode(box_size=10, border=4, image_factory=factory,)
     qr.add_data(url)
     qr.make(fit=True)
     img = qr.make_image()
@@ -111,6 +110,7 @@ def gen_qr_code(url):
     return img
 
 
+@app.route('/get_qrimg/<url>')
 def get_qrimg(url):
     """
     transfer QRcode to base64 format
@@ -122,9 +122,12 @@ def get_qrimg(url):
     img.save(img_buf)
     im_data = img_buf.getvalue()
     data_url = 'data:image/svg+xml;base64,' + base64.encodestring(im_data)
-
-    return data_url
-
+    content = json.dumps(data_url.strip())
+    resp = Response(content, mimetype='application/json')
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    resp.headers['Access-Control-Allow-Method'] = 'GET, OPTIONS'
+    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    return resp
 
 if __name__ == '__main__':
     description = """QR_iosities API"""
