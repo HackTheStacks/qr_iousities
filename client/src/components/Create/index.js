@@ -20,7 +20,7 @@ class Create extends React.Component {
     super(props);
 
     this.state = {
-      artifactUrl: 'something',
+      artifactUrl: '',
       artifact: null,
       type: 'BHL',
       status: null
@@ -55,10 +55,10 @@ class Create extends React.Component {
 
 
     axios.post(`${config.apiUrl}/get_artifact`, {
-      longUrl: this.state.artifactUrl
+      longUrl: this.state.artifactUrl,
+      type: this.state.artifactUrl
     })
     .then((data) => {
-      console.log(data);
       this.setState({
           artifact: data,
           status: 'success'
@@ -104,6 +104,7 @@ class Create extends React.Component {
   }
 
     render() {
+        const placeholder = `e.g. ${FORMATS_BY_TYPE[this.state.type].examples[0]}`;
         let message;
         switch(this.state.status) {
           case 'error': message = this.getErrorMessage(); break;
@@ -121,7 +122,7 @@ class Create extends React.Component {
                 <select onChange={this.handleClickDropdown} value={this.state.type}>
                   <option value="BHL">BHL</option>
                 </select>
-                <input type="text" value={this.state.artifactUrl} onChange={this.handleOnChange} className={styles.searchInput} />
+                <input type="text" placeholder={placeholder} value={this.state.artifactUrl} onChange={this.handleOnChange} className={styles.searchInput} />
                 <input type="submit" value="Save" className={styles.searchButton}/>
               </div>
           </form>

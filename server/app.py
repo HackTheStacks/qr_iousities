@@ -23,7 +23,7 @@ def home():
 
 @app.route("/get_artifact", methods=["GET", "POST", "OPTIONS"])
 def get_artifact():
-    data = request.form
+    data = request.json
     artifact = {}
     long_url = None
     if 'longUrl' in data:
@@ -89,7 +89,7 @@ def redirect_url(short_url):
 
 @app.route("/update_artifact", methods=["GET", "POST", "OPTIONS"])
 def update_artifact():
-    data = request.form
+    data = request.json
     if 'longUrl' in data:
         long_url = data['longUrl']
         short_url = data['shortUrl']

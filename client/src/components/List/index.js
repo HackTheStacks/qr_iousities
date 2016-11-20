@@ -23,7 +23,7 @@ class List extends React.Component {
             }]
         };
     }
-    
+
     componentWillMount() {
         axios
             .get(`${config.apiUrl}/get_all_artifacts`)
@@ -43,6 +43,7 @@ class List extends React.Component {
     render() {
         const artifacts = this.state.artifacts.map(a => {
             return <Artifact
+                id={a.TableID}
                 key={a.TableID}
                 itemId={a.ItemID}
                 name={a.Name} descriptor={a.Descriptor}
@@ -54,7 +55,9 @@ class List extends React.Component {
 
         return (
             <div className={styles.container}>
-              <Link to="/create"><button>Create a new QA code</button></Link>
+                <div className={styles.meta}>
+                  <Link className={styles.button} to="/create">Create a new QA code</Link>
+                </div>
                 <div className={styles.header}>
                     <div className={styles.name}>Name</div>
                     <div className={styles.qrcode}>QR Code</div>
