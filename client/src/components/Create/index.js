@@ -102,8 +102,6 @@ class Create extends React.Component {
   }
 
   getQRCode() {
-      console.info(this.state.artifact);
-    console.info(`${config.apiUrl}/get_qrimg/${this.state.artifact.ShortUrl}`);
     axios.get(`${config.apiUrl}/get_qrimg/${this.state.artifact.ShortUrl}`)
     .then((resp) => {
       this.setState({
@@ -127,7 +125,9 @@ class Create extends React.Component {
 
       return (
         <section>
-          <Link to="/"><button>Return to home</button></Link>
+            <div className={styles.meta}>
+                <Link to="/">Return to home</Link>
+            </div>
           <h1>Create</h1>
           {message}
           <form onSubmit={this.handleOnSubmit}>
