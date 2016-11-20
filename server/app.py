@@ -4,7 +4,6 @@ import qrcode
 import qrcode.image.svg
 import logging
 import json
-import sqlite3
 import os
 import cStringIO
 import base64
@@ -38,18 +37,15 @@ def get_artifact():
     long_url = None
     if not data == None and 'longUrl' in data:
         long_url = data['longUrl']
-        conn = sqlite3.connect('database.db')
-        c = conn.cursor()
         url = (long_url,)
-        c.execute('SELECT * FROM items WHERE LongUrl=?' , url)
-        response = c.fetchone()
-        if not response == None:
-            artifact['Id'] = response[0]
-            artifact['ItemID'] = response[1]
-            artifact['Title'] = response[2]
-            artifact['Descriptor'] = response[3]
-            artifact['ShortUrl'] = response[4]
-            artifact['LongUrl'] = response[5]
+        item = db.query('SELECT * FROM items WHERE LongUrl=?', url, True)
+        if not item == None:
+            artifact['Id'] = item[0]
+            artifact['ItemID'] = item[1]
+            artifact['Title'] = item[2]
+            artifact['Descriptor'] = item[3]
+            artifact['ShortUrl'] = item[4]
+            artifact['LongUrl'] = item[5]
 
     content = json.dumps(artifact)
 
@@ -57,13 +53,8 @@ def get_artifact():
 
 @app.route("/get_all_artifacts", methods=["GET", "OPTIONS"])
 def get_all_artifacts():
-
-    conn = sqlite3.connect('database.db')
-    c = conn.cursor()
-    c.execute('SELECT * FROM items')
-    response = c.fetchall()
-
     artifacts = []
+    response = db.query('SELECT * FROM items')
     if not response == None:
         for item in response:
             artifact = {}
@@ -81,13 +72,14 @@ def get_all_artifacts():
 
 @app.route("/s/<short_url>", methods=["GET", "POST", "OPTIONS"])
 def redirect_url(short_url):
-    """ Lookup long url from the short url and redirect the user """
-    conn = sqlite3.connect('database.db')
-    c = conn.cursor()
+    """
+    Lookup long url from the short url and redirect the user
+    """
     url = (short_url,)
-    c.execute('SELECT LongUrl FROM items WHERE ShortUrl=?' , url)
-    response = c.fetchone()
-    return redirect(location=response[0], code=302)
+    destination = db.query('SELECT LongUrl FROM items WHERE ShortUrl=?', url, True)
+
+    # Requires the destination url to have `http(s)://` as a part of the url
+    return redirect(location=destination[0], code=302)
 
 
 @app.route("/update_artifact", methods=["GET", "POST", "OPTIONS"])
@@ -108,7 +100,7 @@ def delete_artifact():
         ItemID = data['ItemID']
 
     #call delete method here
-        
+
     content = "200 OK"
 
     resp = Response(content, mimetype='application/json')
