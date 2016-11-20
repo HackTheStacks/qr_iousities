@@ -4,6 +4,8 @@ import { render } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import Root from './Root';
 
+import '../shared-styles/global.scss';
+
 const root = document.querySelector('#root');
 
 const mount = (RootComponent) => {
