@@ -21,7 +21,7 @@ app = Flask(__name__)
 def home():
     return 'Redirect to front-end!'
 
-@app.route("/get_artifact", methods=["GET", "POST", "OPTIONS"], )
+@app.route("/get_artifact", methods=["GET", "POST", "OPTIONS"])
 def get_artifact():
     data = request.get_json()
     artifact = {}
