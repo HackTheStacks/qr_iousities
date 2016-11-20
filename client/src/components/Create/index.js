@@ -1,5 +1,6 @@
 
 import React from 'react';
+import {Link} from 'react-router';
 import axios from 'axios';
 import config from '../../config';
 // import styles from './styles.scss';
@@ -59,6 +60,7 @@ class Create extends React.Component {
     render() {
       return (
         <section>
+          <Link to="/"><button>Return to home</button></Link>
           <h1>Search</h1>
           <form onSubmit={this.handleOnSubmit}>
             <div>Please input the artifact you would like to find as a url.</div>
