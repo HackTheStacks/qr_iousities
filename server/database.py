@@ -7,8 +7,6 @@ DATABASE = 'database.db'
 
 class DB():
     def __init__(self):
-        # for henry's machine only
-        #self.db = sqlite3.connect(DATABASE,check_same_thread=False)
         self.db = sqlite3.connect(DATABASE)
 
     def get_db():
