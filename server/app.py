@@ -10,8 +10,6 @@ import base64
 import add_qrtable
 import time
 import sys
-from math import floor
-from itertools import groupby
 
 from flask import Flask, redirect, request, Response
 from database import DB
@@ -84,21 +82,14 @@ def stats(table_id):
     Lookup stats for a specific item
     """
     stats = []
-    response = db.query('SELECT CreatedAt FROM stats WHERE TableId=?', table_id, False)
-
+    response = db.query('SELECT CreatedAt FROM stats WHERE TableId=?', table_id, True)
     if not response == None:
-        update_response = map(lambda x: int((x[0]/3600)%24), response)
-        valdict = dict((k, len(list(g)))for k, g in groupby(sorted(update_response)))
-        for key, val in valdict.items():
-            stat = {}
-            stat['x'] = key
-            stat['y'] = val
-            stats.append(stat)
+        for item in response:
+            stats = {}
+            artifact['createdAt'] = stats[0]
+            stats.append(stats)
 
-        print stats
-
-    print stats
-    content = json.dumps(stats)
+    content = json.dumps(artifacts)
 
     return json_resp(content)
 
@@ -179,7 +170,7 @@ def gen_qr_code(url):
     qr.add_data(url)
     qr.make(fit=True)
     img = qr.make_image()
-
+    
     return img
 
 @app.route('/get_qrimg/<url>')
