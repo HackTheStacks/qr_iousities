@@ -96,12 +96,13 @@ def update_artifact():
 @app.route("/delete_artifact", methods=["GET", "POST", "OPTIONS"])
 def delete_artifact():
     data = request.get_json()
-    if not data == None and 'ItemID' in data:
-        ItemID = data['ItemID']
-
-    #call delete method here
-
-    content = "200 OK"
+    content = ""
+    if not data == None and 'Id' in data:
+        ItemID = data['Id']
+        response = db.delete('DELETE FROM items WHERE TableID=?', ItemID, True)
+        content = json.dumps(response)
+    else:
+        content = "Failure deleting Item from the DB"
 
     resp = Response(content, mimetype='application/json')
     resp.headers['Access-Control-Allow-Origin'] = '*'
