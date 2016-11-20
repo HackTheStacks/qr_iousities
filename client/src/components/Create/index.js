@@ -20,22 +20,29 @@ class Create extends React.Component {
     super(props);
 
     this.state = {
-      artifactUrl: '',
-      artifact: null,
+      itemId: '',
+      artifactUrl: null,
       type: 'BHL',
       status: null
     };
 
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
-    this.handleOnChange = this.handleOnChange.bind(this);
-    this.handleClickDropdown = this.handleClickDropdown.bind(this);
+    this.handleOnArticleURLChange = this.handleOnArticleURLChange.bind(this);
+    this.handleOnItemIdChange = this.handleOnItemIdChange.bind(this);
   }
 
-  handleOnChange(event) {
+  handleOnArticleURLChange(event) {
     this.setState({
       artifactUrl: event.target.value
     });
   }
+
+  handleOnItemIdChange(event) {
+    this.setState({
+      itemId: event.target.value
+    });
+  }
+
 
   handleClickDropdown(event) {
     this.setState({
@@ -45,18 +52,17 @@ class Create extends React.Component {
 
   handleOnSubmit(event) {
     event.preventDefault();
-      const format = FORMATS_BY_TYPE[this.state.type];
-      this.setState({status: null});
+    const format = FORMATS_BY_TYPE[this.state.type];
+    this.setState({status: null});
 
-      if(!format.regex.test(this.state.artifactUrl)) {
-          this.setState({status: 'error'});
-          return;
-      }
+    if(!format.regex.test(this.state.artifactUrl)) {
+        this.setState({status: 'error'});
+        return;
+    }
 
-
-    axios.post(`${config.apiUrl}/get_artifact`, {
-      longUrl: this.state.artifactUrl,
-      type: this.state.artifactUrl
+    axios.post(`${config.apiUrl}/create_artifact`, {
+      itemId: this.state.itemId,
+      longUrl: this.state.artifactUrl
     })
     .then((resp) => {
       this.setState({
@@ -92,19 +98,17 @@ class Create extends React.Component {
   }
 
   getInstructionMessage() {
-    return <div className={styles.instructions}>Please input the artifact you would like to find as a url.</div>;
+    return <div className={styles.instructions}>Please input the item id of the artifact you would like to generate a QR code for.</div>;
   }
 
   handleResults() {
     return (
-      <div>{this.state.artifactUrl}</div>
+      <div>{this.state.itemId}</div>
     );
   }
 
   getQRCode() {
-      console.info(this.state.artifact);
-    console.info(`${config.apiUrl}/get_qrimg/${this.state.artifact.ShortUrl}`);
-    axios.get(`${config.apiUrl}/get_qrimg/${this.state.artifact.ShortUrl}`)
+    axios.get(`${config.apiUrl}/get_qrimg/${this.state.itemId}`)
     .then((resp) => {
       this.setState({
           qrCode: resp.data,
@@ -127,16 +131,16 @@ class Create extends React.Component {
 
       return (
         <section>
-          <Link to="/"><button>Return to home</button></Link>
+            <div className={styles.meta}>
+                <Link to="/">Return to home</Link>
+            </div>
           <h1>Create</h1>
           {message}
           <form onSubmit={this.handleOnSubmit}>
               <div className={styles.searchInputContainer}>
-                <select onChange={this.handleClickDropdown} value={this.state.type}>
-                  <option value="BHL">BHL</option>
-                </select>
-                <input type="text" placeholder={placeholder} value={this.state.artifactUrl} onChange={this.handleOnChange} className={styles.searchInput} />
-                <input type="submit" value="Save" className={styles.searchButton}/>
+                  <input type="text" placeholder="Item ID" value={this.state.itemId} onChange={this.handleOnItemIdChange} className={styles.searchInput} />
+                  <input type="text" placeholder="URL" value={this.state.artifactUrl} onChange={this.handleOnArticleURLChange} className={styles.searchInput} />
+                  <input type="submit" value="Save" className={styles.searchButton}/>
               </div>
           </form>
           {qrCode}

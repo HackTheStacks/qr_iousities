@@ -9,7 +9,7 @@
     background: #CDCEA9;
 }
 
-.name, .qrcode, .shortUrl, .url, .delete {
+.name, .qrcode, .shortUrl, .url, .delete, .stats {
     composes: column from '../../shared-styles/tables.scss';
 
     text-transform: uppercase;

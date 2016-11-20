@@ -9,6 +9,8 @@ import cStringIO
 import base64
 import sys
 from shortener import Shortener
+import add_qrtable
+import time
 
 from flask import Flask, redirect, request, Response
 from database import DB
@@ -20,6 +22,7 @@ from BHL import BHLObject
 app = Flask(__name__)
 db = DB()
 bhl = BHLObject()
+shortener = Shortener()
 
 def json_resp(content):
     resp = Response(content, mimetype='application/json')
@@ -82,16 +85,45 @@ def get_all_artifacts():
 
     return json_resp(content)
 
-@app.route("/s/<short_url>", methods=["GET", "POST", "OPTIONS"])
+
+@app.route("/stats/<table_id>", methods=["GET"])
+def stats(table_id):
+    """
+    Lookup stats for a specific item
+    """
+    stats = []
+    response = db.query('SELECT CreatedAt FROM stats WHERE TableId=?', table_id, True)
+    if not response == None:
+        for item in response:
+            stats = {}
+            artifact['createdAt'] = stats[0]
+            stats.append(stats)
+
+    content = json.dumps(artifacts)
+
+    return json_resp(content)
+
+
+@app.route("/s/<short_url>", methods=["GET"])
 def redirect_url(short_url):
     """
     Lookup long url from the short url and redirect the user
     """
     url = (short_url,)
-    destination = db.query('SELECT LongUrl FROM items WHERE ShortUrl=?', (url,), True)
+    destination = db.query('SELECT LongUrl, TableID FROM items WHERE ShortUrl=?', url, True)
 
-    # Requires the destination url to have `http(s)://` as a part of the url
-    return redirect(location=destination[0], code=302)
+    if destination:
+        try:
+            DB.insert("INSERT INTO stats(ItemsTableID, CreatedAt) VALUES(?, ?)", (destination[1], time.strftime('%Y-%m-%d %H:%M:%S')))
+        except:
+            e = sys.exc_info()[0]
+            print(e)
+
+        # Requires the destination url to have `http(s)://` as a part of the url
+        return redirect(location=destination[0], code=302)
+    else:
+        """ TODO 4040040404040404040"""
+        pass
 
 
 @app.route("/create_artifact", methods=["GET", "POST", "OPTIONS"])
@@ -115,7 +147,7 @@ def create_artifact():
         descriptor['year'] = year
     short_url = shortener.id_to_short(itemId)
     tableId = db.getNextTableID()
-    db.execute_cmd('INSERT INTO items VALUES (?,?,?,?,?,?)', (tableId, itemId, title, descriptor, short_url, long_url), True) 
+    db.execute_cmd('INSERT INTO items VALUES (?,?,?,?,?,?)', (tableId, itemId, title, descriptor, short_url, long_url), True)
     return json_resp(content)
 
 @app.route("/update_artifact", methods=["GET", "POST", "OPTIONS"])
@@ -131,7 +163,7 @@ def update_artifact():
     if bhl.validateUrl(item_url):
         itemId = bhl.parseId(data['itemUrl'])
         short_url = shortener.id_to_short(itemId)
-        db.execute_cmd('UPDATE items SET LongUrl = ? WHERE ItemID = ?', (long_url,itemId)) 
+        db.execute_cmd('UPDATE items SET LongUrl = ? WHERE ItemID = ?', (long_url,itemId))
     return json_resp(content)
 
 
@@ -180,25 +212,38 @@ def gen_qr_code(shortUrl):
 
     return img
 
-
 @app.route('/get_qrimg/<url>')
-def get_qrimg(itemUrl):
+def get_qrimg(url):
     """
     transfer QRcode to base64 format
     input: url (supposed to be the url from BHL)
     output: img_url which represents the qrcode
     """
     img_buf = cStringIO.StringIO()
-    img = gen_qr_code(itemUrl)
-    img.save(img_buf)
-    im_data = img_buf.getvalue()
-    data_url = 'data:image/svg+xml;base64,' + base64.encodestring(im_data)
-    content = json.dumps(data_url.strip())
+    conn = sqlite3.connect('database.db')
+
+    add_qrtable.create_table(conn)
+    c = conn.cursor()
+    c.execute("SELECT EXISTS(SELECT qrcode_base FROM qrcode WHERE shortUrl = ?)",(url,))
+    check_data=c.fetchone()
+    print check_data
+    if check_data[0] == 0:
+        print "i dont have value"
+        img = gen_qr_code(url)
+        img.save(img_buf)
+        im_data = img_buf.getvalue()
+        data_url = 'data:image/svg+xml;base64,' + base64.encodestring(im_data)
+        content = json.dumps(data_url.strip())
+        c.execute("INSERT OR IGNORE INTO qrcode(shortUrl, qrcode_base) VALUES(?, ?)",(url,content))
+        conn.commit()
+    else:
+        content = check_data[0]
     resp = Response(content, mimetype='application/json')
     resp.headers['Access-Control-Allow-Origin'] = '*'
     resp.headers['Access-Control-Allow-Method'] = 'GET, OPTIONS'
     resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
     return resp
+
 
 if __name__ == '__main__':
     description = """QR_iosities API"""
@@ -206,5 +251,6 @@ if __name__ == '__main__':
     level = get_level(os.environ.get('LOG_LEVEL', 'INFO'))
     logging.setLevel(level)
     logger = logging.getLogger("QR_iosities")
+    app.debug = True
 
     app.run(host='0.0.0.0')

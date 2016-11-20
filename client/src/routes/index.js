@@ -32,7 +32,7 @@ const routes = (
   <Route path="/" component={App}>
     <IndexRoute getComponent={importList} />
     <Route path="create" getComponent={importCreate} />
-    <Route path="edit/:id" getComponent={importEdit} />
+    <Route path="edit/:itemId" getComponent={importEdit} />
   </Route>
 );
 

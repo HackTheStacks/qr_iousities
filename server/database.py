@@ -26,12 +26,24 @@ class DB():
         cur.close()
         return (results[0] if results else None) if one else results
 
+    def execute(self, query, args=()):
+        cur = self.db.cursor()
+        cur.execute(query, args)
+        self.db.commit()
+        cur.close()
+
+    def executemany(self, query, args=()):
+        cur = self.db.cursor()
+        cur.executemany(query, args)
+        self.db.commit()
+        cur.close()
+
     def execute_cmd(self, query, args=(), one=False):
         cur = self.db.execute(query, args)
         cur.close()
         return "Success executing query"
 
-    def getNextTableID():
+    def getNextTableID(self):
         query = 'SELECT Max(TableID) from items'
         cur = self.db.execute(query, ())
         nextID = cur.fetchone()[0] + 1
