@@ -105,6 +105,23 @@ def update_artifact():
 
     return resp
 
+@app.route("/delete_artifact", methods=["GET", "POST", "OPTIONS"])
+def delete_artifact():
+    data = request.get_json()
+    if not data == None and 'ItemID' in data:
+        ItemID = data['ItemID']
+
+    #call delete method here
+        
+    content = "200 OK"
+
+    resp = Response(content, mimetype='application/json')
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    resp.headers['Access-Control-Allow-Method'] = 'GET, POST, OPTIONS'
+    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+
+    return resp
+
 def get_level(level):
     if level == 'CRITICAL':
         return logging.CRITICAL
