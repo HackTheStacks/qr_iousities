@@ -5,10 +5,11 @@ import styles from './styles.scss';
 
 function App({ children }) {
   return (
-    <div>
-      <div className={styles.content}>
+    <div className={styles.content}>
+        <div className={styles.header}>
+            QRiousities
+        </div>
         {children}
-      </div>
     </div>
   );
 }

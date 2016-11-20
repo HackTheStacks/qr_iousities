@@ -1,0 +1,14 @@
+
+@import '../../shared-styles/variables';
+
+.row {
+    composes: row from '../../shared-styles/tables.scss';
+}
+
+.name, .qrcode, .shortUrl, .url, .delete {
+    composes: column from '../../shared-styles/tables.scss';
+}
+
+.delete {
+    text-align: center;
+}
