@@ -43,12 +43,12 @@ def get_artifact():
         url = (long_url,)
         item = db.query('SELECT * FROM items WHERE LongUrl=?', url, True)
         if not item == None:
-            artifact['Id'] = item[0]
-            artifact['ItemID'] = item[1]
-            artifact['Title'] = item[2]
-            artifact['Descriptor'] = item[3]
-            artifact['ShortUrl'] = item[4]
-            artifact['LongUrl'] = item[5]
+            artifact['id'] = item[0]
+            artifact['itemId'] = item[1]
+            artifact['title'] = item[2]
+            artifact['descriptor'] = item[3]
+            artifact['shortUrl'] = item[4]
+            artifact['longUrl'] = item[5]
 
     content = json.dumps(artifact)
 
@@ -61,17 +61,36 @@ def get_all_artifacts():
     if not response == None:
         for item in response:
             artifact = {}
-            artifact['Id'] = item[0]
-            artifact['ItemID'] = item[1]
-            artifact['Title'] = item[2]
-            artifact['Descriptor'] = item[3]
-            artifact['ShortUrl'] = item[4]
-            artifact['LongUrl'] = item[5]
+            artifact['id'] = item[0]
+            artifact['itemId'] = item[1]
+            artifact['title'] = item[2]
+            artifact['descriptor'] = item[3]
+            artifact['shortUrl'] = item[4]
+            artifact['longUrl'] = item[5]
             artifacts.append(artifact)
 
     content = json.dumps(artifacts)
 
     return json_resp(content)
+
+
+@app.route("/stats/<table_id>", methods=["GET"])
+def stats(table_id):
+    """
+    Lookup stats for a specific item
+    """
+    stats = []
+    response = db.query('SELECT CreatedAt FROM stats WHERE TableId=?', table_id, True)
+    if not response == None:
+        for item in response:
+            stats = {}
+            artifact['createdAt'] = stats[0]
+            stats.append(stats)
+
+    content = json.dumps(artifacts)
+
+    return json_resp(content)
+
 
 @app.route("/s/<short_url>", methods=["GET"])
 def redirect_url(short_url):
