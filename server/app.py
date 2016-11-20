@@ -2,7 +2,6 @@
 
 import qrcode
 import qrcode.image.svg
-import sys
 import logging
 import json
 import sqlite3
@@ -11,7 +10,6 @@ import cStringIO
 import base64
 
 from flask import Flask, redirect, request, Response
-from flask import send_file
 
 app = Flask(__name__)
 
