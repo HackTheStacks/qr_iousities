@@ -14,12 +14,12 @@ class List extends React.Component {
         super(props);
         this.state = {
             artifacts: [{
-                Id: 1,
-                ItemId: 'uhhh',
-                Title: 'hi',
-                Descriptor: 'adsfasdfasdf',
-                ShortUrl: 'QWErasdf3',
-                LongUrl: 'http://nytimes.com'
+                id: 1,
+                itemId: 'uhhh',
+                title: 'hi',
+                descriptor: 'adsfasdfasdf',
+                shortUrl: 'QWErasdf3',
+                longUrl: 'http://nytimes.com'
             }]
         };
     }
@@ -28,9 +28,11 @@ class List extends React.Component {
         axios
             .get(`${config.apiUrl}/get_all_artifacts`)
             .then(resp => {
-              console.log(resp);
               this.setState({artifacts: resp.data});
-            });
+            })
+            .catch((err) => {
+              console.log(err);
+            })
     }
 
     onDelete(id) {
@@ -47,13 +49,13 @@ class List extends React.Component {
         artifacts = this.state.artifacts.map(a => {
             return (
               <Artifact
-                key={a.Id}
-                Id={a.Id}
-                ItemId={a.ItemID}
-                Title={a.Title}
-                Descriptor={a.Descriptor}
-                ShortUrl={a.ShortUrl}
-                LongUrl={a.LongUrl}
+                key={a.id}
+                id={a.id}
+                itemId={a.itemId}
+                title={a.title}
+                descriptor={a.descriptor}
+                shortUrl={a.shortUrl}
+                longUrl={a.longUrl}
               />
             )
         });

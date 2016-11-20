@@ -5,11 +5,11 @@ import axios from 'axios';
 
 class Artifact extends Component {
     render() {
-      const {ItemId} = this.props;
+      const {itemId} = this.props;
         return (
             <div className={styles.row}>
-                <Link to={{ pathname: `/edit/${ItemId}`}}><div className={styles.Title}>{this.props.Title}</div></Link>
-                <div className={styles.shortUrl}>{this.props.ShortUrl}</div>
+                <Link to={{ pathname: `/edit/${itemId}`}}><div className={styles.Title}>{this.props.title}</div></Link>
+                <div className={styles.shortUrl}>{this.props.shortUrl}</div>
                 <div className={styles.url}>{this.props.longUrl}</div>
             </div>
         );
@@ -17,12 +17,12 @@ class Artifact extends Component {
 }
 
 Artifact.propTypes = {
-    Id: PropTypes.number.isRequired,
-    ItemId: PropTypes.string,
-    Title: PropTypes.string.isRequired,
-    Descriptor: PropTypes.string.isRequired,
-    ShortUrl: PropTypes.string.isRequired,
-    LongUrl: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
+    itemId: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    descriptor: PropTypes.string.isRequired,
+    shortUrl: PropTypes.string.isRequired,
+    longUrl: PropTypes.string.isRequired,
 };
 
 export default Artifact;
