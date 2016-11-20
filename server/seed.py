@@ -23,12 +23,9 @@ if __name__ == '__main__':
     db.execute('''CREATE TABLE stats(TableID INTEGER, CreatedAt INTEGER)''')
 
     items = [
-        ('1', 'asdf', 'Super Item', 'shorturl', 'http://nytimes.com'),
-        ('2', 'fdas', 'Super Item', 'shorturl', 'http://nytimes.com'),
-        ('3', 'difj', 'Super Item', 'shorturl', 'http://nytimes.com'),
-        ('4', 'asdiofjasodf', 'Super Item', 'shorturl', 'http://nytimes.com'),
-        ('5', 'asdfiasdoifj', 'Super Item', 'shorturl', 'http://nytimes.com'),
-        ('6', 'adsjf', 'Super Item', 'shorturl', 'http://nytimes.com'),
+        ('BHL-001', 'T-Shirt', 'Super Item', 'rndmstrng', 'http://nytimes.com'),
+        ('BHL-002', 'Book', 'Super Books', 'tneoius', 'http://twitter.com'),
+        ('BHL-003', 'Also Something', 'Super super super', 'shrtrl', 'http://short.com'),
     ]
 
     db.executemany('''INSERT INTO items(ItemID, Name, Descriptor, ShortUrl, LongUrl) VALUES (?,?,?,?,?)''', items)
