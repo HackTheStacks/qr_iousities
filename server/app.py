@@ -85,11 +85,15 @@ def stats(table_id):
     response = db.query('SELECT CreatedAt FROM stats WHERE TableId=?', table_id, False)
 
     if not response == None:
-        for v, g in groupby(response, lambda x: floor(x[0]/3600)):
+        update_response = map(lambda x: int((x[0]/3600)%24), response)
+        valdict = dict((k, len(list(g)))for k, g in groupby(sorted(update_response)))
+        for key, val in valdict.items():
             stat = {}
-            stat['x'] = v
-            stat['y'] = len(list(g))
+            stat['x'] = key
+            stat['y'] = val
             stats.append(stat)
+
+        print stats
 
     print stats
     content = json.dumps(stats)
@@ -173,7 +177,7 @@ def gen_qr_code(url):
     qr.add_data(url)
     qr.make(fit=True)
     img = qr.make_image()
-    
+
     return img
 
 @app.route('/get_qrimg/<url>')
