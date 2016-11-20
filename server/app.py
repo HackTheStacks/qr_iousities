@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 
+
 import qrcode
 import qrcode.image.svg
 import sys
@@ -134,16 +135,6 @@ def get_qrimg(url):
     resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
     return resp
 
-@app.route("/qrcode")
-def gen_qr_code(url):
-	factory = qrcode.image.svg.SvgImage
-    qr = qrcode.QRCode(box_size=10,
-						der=4,image_factory=factory,)
-    qr.add_data(url)
-    qr.make(fit=True)
-    img = qr.make_image()
-
-    return img
 
 
 if __name__ == '__main__':
