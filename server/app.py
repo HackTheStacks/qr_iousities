@@ -7,16 +7,18 @@ import json
 import os
 import cStringIO
 import base64
+import sys
 
 from flask import Flask, redirect, request, Response
 from database import DB
 
+sys.append("/artifactObjects")
+
+from BHL import BHLObject
+
 app = Flask(__name__)
 db = DB()
-
-# @app.teardown_appcontext
-# def close_connection(exception):
-    # db.close_connection(exception)
+bhl = BHLObject()
 
 def json_resp(content):
     resp = Response(content, mimetype='application/json')
@@ -34,21 +36,33 @@ def home():
 def get_artifact():
     data = request.get_json()
     artifact = {}
+    content = ""
     long_url = None
     if not data == None and 'longUrl' in data:
         long_url = data['longUrl']
-        url = (long_url,)
-        item = db.query('SELECT * FROM items WHERE LongUrl=?', url, True)
-        if not item == None:
-            artifact['Id'] = item[0]
-            artifact['ItemID'] = item[1]
-            artifact['Title'] = item[2]
-            artifact['Descriptor'] = item[3]
-            artifact['ShortUrl'] = item[4]
-            artifact['LongUrl'] = item[5]
+        if bhl.validateUrl(long_url):
+            url = (long_url,)
+            item = db.query('SELECT * FROM items WHERE LongUrl=?', url, True)
+            if not item == None:
+                artifact['Id'] = item[0]
+                artifact['ItemID'] = item[1]
+                artifact['Title'] = item[2]
+                artifact['Descriptor'] = item[3]
+                artifact['ShortUrl'] = item[4]
+                artifact['LongUrl'] = item[5]
 
-    content = json.dumps(artifact)
+                content = artifact
+            else:
+                itemID = bhl.parseID(long_url)
+                [author, title, year] = bhl.getArtifactData(itemID)
+                descriptor = {}
+                descriptor['Author'] = author
+                descriptor['Year'] = year
+                item = db.query('INSERT INTO items ', url, False)
+        else:
+            content = "Invalid URL"
 
+    response = json.dumps(content)
     return json_resp(content)
 
 @app.route("/get_all_artifacts", methods=["GET", "OPTIONS"])
