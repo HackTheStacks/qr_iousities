@@ -94,7 +94,7 @@ def redirect_url(short_url):
     return redirect(location=destination[0], code=302)
 
 
-@app.route("/update_artifact", methods=["GET", "POST", "OPTIONS"])
+@app.route("/create_artifact", methods=["GET", "POST", "OPTIONS"])
 def create_artifact():
     data = request.get_json()
     if (not data == None) and ('longUrl' in data) and ('itemUrl' in data):
