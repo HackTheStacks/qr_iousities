@@ -145,6 +145,7 @@ def create_artifact():
     tableId = db.getNextTableID()
     db.execute_cmd('INSERT INTO items VALUES (?,?,?,?,?,?)', (tableId, itemId, title, descriptor, short_url, long_url), True)
     response = db.query('SELECT * FROM items WHERE ItemId = ?', (itemId,))
+    artifacts = [] 
     if not response == None:
         for item in response:
 	    artifact = {}
@@ -176,7 +177,8 @@ def update_artifact():
 	db.	
     response = db.query('SELECT * FROM items WHERE ItemId = ?', (itemId,))
     if not response == None:
-        for item in response:
+      artifacts = []
+      for item in response:
 	    artifact = {}
 	    artifact['tableId'] = item[0]
 	    artifact['itemId'] = item[1]
