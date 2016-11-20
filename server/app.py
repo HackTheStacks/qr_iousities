@@ -51,10 +51,9 @@ def redirect_url(short_url):
     conn = sqlite3.connect('database.db')
     c = conn.cursor()
     url = (short_url,)
-    c.execute('SELECT * FROM items WHERE ShortUrl=?' , url)
+    c.execute('SELECT LongUrl FROM items WHERE ShortUrl=?' , url)
     response = c.fetchone()
-    return json.dumps(response)
-    #return redirect(location="http://google.com", code=302)
+    return redirect(location=response[0], code=302)
 
 
 @app.route("/update_artifact", methods=["GET", "POST", "OPTIONS"])
