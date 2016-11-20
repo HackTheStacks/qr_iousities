@@ -1,5 +1,6 @@
 
-import React from 'react';
+import React, {PropTypes} from 'react';
+import {Link} from 'react-router';
 import axios from 'axios';
 import config from '../../config';
 import styles from './styles.scss';
@@ -109,6 +110,7 @@ class Create extends React.Component {
 
       return (
         <section>
+          <Link to="/"><button>Return to home</button></Link>
           <h1>Create</h1>
           {message}
           <form onSubmit={this.handleOnSubmit}>

@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import {Link} from 'react-router';
 import styles from './styles.scss';
 import axios from 'axios';
 
@@ -6,7 +7,7 @@ class Artifact extends Component {
     render() {
         return (
             <div className={styles.row}>
-                <div className={styles.name}>{this.props.name}</div>
+                <Link to={`/edit/1`}><div className={styles.name}>{this.props.name}</div></Link>
                 <div className={styles.qrcode}>{this.props.qrcode}</div>
                 <div className={styles.shortUrl}>{this.props.shortUrl}</div>
                 <div className={styles.url}>{this.props.url}</div>
