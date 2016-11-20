@@ -1,11 +1,17 @@
 #!/usr/bin/env python
 
+
+import qrcode
+import qrcode.image.svg
+import sys
 import logging
 import json
 import sqlite3
 import os
 
 from flask import Flask, redirect, request, Response
+from flask import send_file
+
 app = Flask(__name__)
 
 @app.route("/")
@@ -79,6 +85,20 @@ def get_level(level):
         return logging.DEBUG
     else:
         return logging.INFO
+
+@app.route("/qrcode")
+def gen_qr_code(url):
+	factory = qrcode.image.svg.SvgImage
+    url = "https://github.com"
+    qr = qrcode.QRCode(box_size=10,
+						der=4,image_factory=factory,)
+    qr.add_data(url)
+    qr.make(fit=True)
+    img = qr.make_image()
+    img.save("temp.svg")
+
+    return img
+
 
 if __name__ == '__main__':
     description = """QR_iosities API"""
