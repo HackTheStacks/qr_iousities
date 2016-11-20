@@ -70,6 +70,7 @@ class List extends React.Component {
                     <div className={styles.name}>Name</div>
                     <div className={styles.url}>URL</div>
                     <div className={styles.shortUrl}>Short URL</div>
+                    <div className={styles.stats}>Stats</div>
                 </div>
                 {artifacts}
             </div>

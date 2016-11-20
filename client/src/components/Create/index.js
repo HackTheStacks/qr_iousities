@@ -21,7 +21,7 @@ class Create extends React.Component {
 
     this.state = {
       itemId: '',
-      artifactUrl: 'null',
+      artifactUrl: null,
       type: 'BHL',
       status: null
     };
@@ -138,9 +138,9 @@ class Create extends React.Component {
           {message}
           <form onSubmit={this.handleOnSubmit}>
               <div className={styles.searchInputContainer}>
-                <input type="text" placeholder={placeholder} value={this.state.itemId} onChange={this.handleOnItemIdChange} className={styles.searchInput} />
-                <input type="text" placeholder={placeholder} value={this.state.artifactUrl} onChange={this.handleOnArticleURLChange} className={styles.searchInput} />
-                <input type="submit" value="Save" className={styles.searchButton}/>
+                  <input type="text" placeholder="Item ID" value={this.state.itemId} onChange={this.handleOnItemIdChange} className={styles.searchInput} />
+                  <input type="text" placeholder="URL" value={this.state.artifactUrl} onChange={this.handleOnArticleURLChange} className={styles.searchInput} />
+                  <input type="submit" value="Save" className={styles.searchButton}/>
               </div>
           </form>
           {qrCode}

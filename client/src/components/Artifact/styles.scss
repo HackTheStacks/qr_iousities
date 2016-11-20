@@ -5,7 +5,7 @@
     composes: row from '../../shared-styles/tables.scss';
 }
 
-.name, .qrcode, .shortUrl, .url, .delete {
+.name, .qrcode, .shortUrl, .url, .delete, .stats  {
     composes: column from '../../shared-styles/tables.scss';
 }
 
