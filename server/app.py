@@ -8,6 +8,8 @@ import os
 import cStringIO
 import base64
 import add_qrtable
+import time
+import sys
 
 from flask import Flask, redirect, request, Response
 from database import DB
@@ -71,16 +73,26 @@ def get_all_artifacts():
 
     return json_resp(content)
 
-@app.route("/s/<short_url>", methods=["GET", "POST", "OPTIONS"])
+@app.route("/s/<short_url>", methods=["GET"])
 def redirect_url(short_url):
     """
     Lookup long url from the short url and redirect the user
     """
     url = (short_url,)
-    destination = db.query('SELECT LongUrl FROM items WHERE ShortUrl=?', url, True)
+    destination = db.query('SELECT LongUrl, TableID FROM items WHERE ShortUrl=?', url, True)
 
-    # Requires the destination url to have `http(s)://` as a part of the url
-    return redirect(location=destination[0], code=302)
+    if destination:
+        try:
+            DB.insert("INSERT INTO stats(ItemsTableID, CreatedAt) VALUES(?, ?)", (destination[1], time.strftime('%Y-%m-%d %H:%M:%S')))
+        except:
+            e = sys.exc_info()[0]
+            print(e)
+
+        # Requires the destination url to have `http(s)://` as a part of the url
+        return redirect(location=destination[0], code=302)
+    else:
+        """ TODO 4040040404040404040"""
+        pass
 
 
 @app.route("/update_artifact", methods=["GET", "POST", "OPTIONS"])
@@ -180,5 +192,6 @@ if __name__ == '__main__':
     level = get_level(os.environ.get('LOG_LEVEL', 'INFO'))
     logging.setLevel(level)
     logger = logging.getLogger("QR_iosities")
+    app.debug = True
 
     app.run(host='0.0.0.0')
