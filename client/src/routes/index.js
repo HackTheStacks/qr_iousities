@@ -14,8 +14,8 @@ const importList = (nextState, cb) => {
     .catch((e) => { throw e; });
 };
 
-const importCreate = (nextState, cb) => {
-  System.import('../components/Create')
+const importManage = (nextState, cb) => {
+  System.import('../components/Manage')
     .then(module => cb(null, module.default))
     .catch((e) => { throw e; });
 };
@@ -25,7 +25,7 @@ const importCreate = (nextState, cb) => {
 const routes = (
   <Route path="/" component={App}>
     <IndexRoute getComponent={importList} />
-    <Route path="create" getComponent={importCreate} />
+    <Route path="manage" getComponent={importManage} />
   </Route>
 );
 
@@ -34,7 +34,7 @@ const routes = (
 // https://github.com/gaearon/react-hot-loader/issues/288
 if (module.hot) {
   require('../components/List');    // eslint-disable-line global-require
-  require('../components/Create');
+  require('../components/Manage');
 }
 
 export default routes;
