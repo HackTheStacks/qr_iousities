@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-
-
 import qrcode
 import qrcode.image.svg
 import sys
