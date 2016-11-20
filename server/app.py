@@ -42,7 +42,8 @@ def update_artifact():
     if 'longUrl' in data:
         long_url = data['longUrl']
         short_url = data['shortUrl']
-    return data
+    res = json.dumps(data)
+    return res
 
 if __name__ == '__main__':
     description = """QR_iosities API"""
