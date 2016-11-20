@@ -8,8 +8,8 @@ import App from '../components/App';
 // chunking assets. Check out the following for more:
 // https://gist.github.com/sokra/27b24881210b56bbaff7#code-splitting-with-es6
 
-const importHome = (nextState, cb) => {
-  System.import('../components/Home')
+const importList = (nextState, cb) => {
+  System.import('../components/List')
     .then(module => cb(null, module.default))
     .catch((e) => { throw e; });
 };
@@ -24,8 +24,8 @@ const importCreate = (nextState, cb) => {
 // https://github.com/reactjs/react-router/blob/master/docs/guides/DynamicRouting.md
 const routes = (
   <Route path="/" component={App}>
-    <IndexRoute getComponent={importHome} />
-      <Route path="create" getComponent={importCreate} />
+    <IndexRoute getComponent={importList} />
+    <Route path="create" getComponent={importCreate} />
   </Route>
 );
 
@@ -35,6 +35,7 @@ const routes = (
 if (module.hot) {
   require('../components/Home');    // eslint-disable-line global-require
   require('../components/Create');
+  require('../components/List');    // eslint-disable-line global-require
 }
 
 export default routes;
