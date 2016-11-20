@@ -14,9 +14,9 @@ class List extends React.Component {
         super(props);
         this.state = {
             artifacts: [{
-                TableId: 1,
+                Id: 1,
                 ItemId: 'uhhh',
-                Name: 'hi',
+                Title: 'hi',
                 Descriptor: 'adsfasdfasdf',
                 ShortUrl: 'QWErasdf3',
                 LongUrl: 'http://nytimes.com'
@@ -28,7 +28,8 @@ class List extends React.Component {
         axios
             .get(`${config.apiUrl}/get_all_artifacts`)
             .then(resp => {
-                this.setState({artifacts: resp});
+              console.log(resp);
+              this.setState({artifacts: resp.data});
             });
     }
 
@@ -41,17 +42,22 @@ class List extends React.Component {
     }
 
     render() {
-        const artifacts = this.state.artifacts.map(a => {
-            return <Artifact
-                id={a.TableID}
-                key={a.TableID}
+      let artifacts = ''
+      if (this.state.artifacts) {
+        artifacts = this.state.artifacts.map(a => {
+            return (
+              <Artifact
+                key={a.Id}
+                id={a.Id}
                 itemId={a.ItemID}
-                name={a.Name} descriptor={a.Descriptor}
+                Title={a.Title}
+                descriptor={a.Descriptor}
                 shortUrl={a.ShortUrl}
                 url={a.LongUrl}
-                onDelete={id => this.onDelete(a.TableID)}
-                />
+              />
+            )
         });
+      }
 
         return (
             <div className={styles.container}>
@@ -62,7 +68,6 @@ class List extends React.Component {
                     <div className={styles.name}>Name</div>
                     <div className={styles.url}>URL</div>
                     <div className={styles.shortUrl}>Short URL</div>
-                    <div className={styles.delete}>Delete</div>
                 </div>
                 {artifacts}
             </div>

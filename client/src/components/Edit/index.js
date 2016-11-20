@@ -10,42 +10,70 @@ class Edit extends React.Component {
     super(props);
 
     this.state = {
-      artifactUrl: 'something',
+      artifactUrl: '',
+      artifact: {
+          Id: 1,
+          ItemID: 'Something_1',
+          Title: 'Artifact',
+          Descriptor: 'Something something something',
+          ShortUrl: 'https://here.com',
+          LongUrl: 'https://nytimes.com'
+      },
       isArtifactUrlChanged: false
     };
 
-    this.handleOnSubmit = this.handleOnSubmit.bind(this);
     this.handleOnChange = this.handleOnChange.bind(this);
+    this.handleOnUpdate = this.handleOnUpdate.bind(this);
+    this.handleGetQRCode = this.handleGetQRCode.bind(this);
   }
 
-  handleOnChange(event) {
-    this.setState({
-      artifactUrl: event.target.value
-    });
-  }
-
-  handleOnSubmit(event) {
-    event.preventDefault();
-
+  componentWillMount() {
     axios.post(`${config.apiUrl}/get_artifact`, {
       longUrl: this.state.artifactUrl
     })
     .then((data) => {
-      console.log(data);
       this.setState({
         artifact: data
-      })
+      });
     })
     .catch((err) => {
       console.log(err);
     })
-  };
+  }
 
+  handleOnChange(event){
+    this.setState({
+      artifactUrl: event.target.value,
+      isArtifactUrlChanged: true
+    });
+  }
 
-  handleResult() {
-    console.log('results');
+  handleOnUpdate(){
+    event.preventDefault();
+    axios.post(`${config.apiUrl}/update_artifact`, {
+      longUrl: this.state.artifactUrl
+    })
+    .then((data) => {
+      this.handleResult(data);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  }
+
+  handleGetQRCode() {
+    axios.post(`${config.apiUrl}/get_qrimg/${this.state.artifact.longUrl}`)
+      .then((data) => {
+        <div>data</div>
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }
+
+  handleResults(data) {
     return (
-      <div>{this.state.artifactUrl}</div>
+      <div>data</div>
     );
   }
 
@@ -53,13 +81,18 @@ class Edit extends React.Component {
       return (
         <section>
           <Link to="/"><button>Return to home</button></Link>
-          <h1>Search</h1>
-          <form onSubmit={this.handleOnSubmit}>
-            <div>Please input the url that you would update the QR code to:</div>
-            <input type="text" value={this.state.artifactUrl} onChange={this.handleOnChange} className="searchBar" />
-            <input type="submit" value="Update"/>
-          </form>
-          {this.state.isArtifactUrlChanged ? this.handleResult : null}
+          <h1>{this.state.artifact.Title}</h1>
+          <div>
+            URL:
+            <input type="text" value={this.state.artifact.LongUrl} onChange={this.handleOnChange} />
+          </div>
+          {this.state.isArtifactUrlChanged ? <button onSubmit={this.handleOnUpdate}>Update</button> : null}
+          <div>
+            short URL: {this.state.artifact.ShortUrl}
+          </div>
+          <div>{this.handleGetQRCode}</div>
+          <button>Delete</button>
+          <button>Print</button>
         </section>
     );
   }
