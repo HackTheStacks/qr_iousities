@@ -7,7 +7,7 @@ import styles from './styles.scss';
 
 const FORMATS_BY_TYPE = {
     BHL: {
-        regex: new RegExp('.*'),
+        regex: new RegExp('https://www.biodiversitylibrary.org/item'),
         examples: [
             'https://www.biodiversitylibrary.org/item/16800',
             'https://www.biodiversitylibrary.org/item/16800#page/5/mode/1up'
