@@ -37,22 +37,35 @@ def update_artifact():
 @app.route('/get_qrimg')
 
 def gen_qr_code(url):
+	"""
+	use qrcode library to generate qrcode
+	input: url (supposed to be the url from BHL)
+	output: img_object generate which represents the qrcode
+	"""
+
 	factory = qrcode.image.svg.SvgImage
     qr = qrcode.QRCode(box_size=10,
 						der=4,image_factory=factory,)
     qr.add_data(url)
     qr.make(fit=True)
     img = qr.make_image()
-    return img
+
+	return img
 
 
 def get_qrimg(url):
-    img_buf = cStringIO.StringIO()
+	"""
+	transfer QRcode to base64 format
+	input: url (supposed to be the url from BHL)
+	output: img_url which represents the qrcode
+	"""
+	img_buf = cStringIO.StringIO()
     img = gen_qr_code(url)
     img.save(img_buf)
 	im_data = img_buf.getvalue()
 	data_url = 'data:image/svg+xml;base64,' + base64.encodestring(im_data)
-    return data_url
+
+	return data_url
 
 
 if __name__ == '__main__':
