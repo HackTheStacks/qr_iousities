@@ -10,6 +10,8 @@ import base64
 import add_qrtable
 import time
 import sys
+from math import floor
+from itertools import groupby
 
 from flask import Flask, redirect, request, Response
 from database import DB
@@ -80,14 +82,17 @@ def stats(table_id):
     Lookup stats for a specific item
     """
     stats = []
-    response = db.query('SELECT CreatedAt FROM stats WHERE TableId=?', table_id, True)
-    if not response == None:
-        for item in response:
-            stats = {}
-            artifact['createdAt'] = stats[0]
-            stats.append(stats)
+    response = db.query('SELECT CreatedAt FROM stats WHERE TableId=?', table_id, False)
 
-    content = json.dumps(artifacts)
+    if not response == None:
+        for v, g in groupby(response, lambda x: floor(x[0]/3600)):
+            stat = {}
+            stat['x'] = v
+            stat['y'] = len(list(g))
+            stats.append(stat)
+
+    print stats
+    content = json.dumps(stats)
 
     return json_resp(content)
 

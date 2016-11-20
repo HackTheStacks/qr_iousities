@@ -26,6 +26,13 @@ const importEdit = (nextState, cb) => {
     .catch((e) => { throw e; });
 }
 
+const importStats = (nextState, cb) => {
+  System.import('../components/Stats')
+    .then(module => cb(null, module.default))
+    .catch((e) => { throw e; });
+}
+
+
 // We use `getComponent` to dynamically load routes.
 // https://github.com/reactjs/react-router/blob/master/docs/guides/DynamicRouting.md
 const routes = (
@@ -33,6 +40,7 @@ const routes = (
     <IndexRoute getComponent={importList} />
     <Route path="create" getComponent={importCreate} />
     <Route path="edit/:id" getComponent={importEdit} />
+    <Route path="stats/:id" getComponent={importStats} />
   </Route>
 );
 
