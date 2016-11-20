@@ -1,12 +1,16 @@
 #!/usr/bin/env python
 
-import sys
 import logging
 import json
 import sqlite3
+import os
 
 from flask import Flask ,redirect, request
 app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return 'Redirect to front-end!'
 
 @app.route("/get_artifact", methods=["GET", "POST", "OPTIONS"])
 def get_artifact():
@@ -17,7 +21,7 @@ def get_artifact():
     long_url = None
     if 'longUrl' in data:
         long_url = data['longUrl']
-        
+
     res = json.dumps(data)
     return res
 
@@ -45,10 +49,23 @@ def update_artifact():
     res = json.dumps(data)
     return res
 
+def get_level(level):
+    if level == 'CRITICAL':
+        return logging.CRITICAL
+    elif level == 'ERROR':
+        return logging.ERROR
+    elif level == 'WARNING':
+        return logging.WARNING
+    elif level == 'DEBUG':
+        return logging.DEBUG
+    else:
+        return logging.INFO
+
 if __name__ == '__main__':
     description = """QR_iosities API"""
 
-    logging.basicConfig(level=logging.INFO)
+    level = get_level(os.environ.get('LOG_LEVEL', 'INFO'))
+    logging.setLevel(level)
     logger = logging.getLogger("QR_iosities")
 
     app.run(host='0.0.0.0')
