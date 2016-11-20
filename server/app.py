@@ -10,8 +10,14 @@ import cStringIO
 import base64
 
 from flask import Flask, redirect, request, Response
+from database import DB
 
 app = Flask(__name__)
+db = DB()
+
+# @app.teardown_appcontext
+# def close_connection(exception):
+    # db.close_connection(exception)
 
 @app.route("/")
 def home():
