@@ -25,7 +25,7 @@ def get_artifact():
 
     resp = Response(content, mimetype='application/json')
     resp.headers['Access-Control-Allow-Origin'] = '*'
-    resp.headers['Access-Control-Allow-Method'] = 'GET, OPTIONS'
+    resp.headers['Access-Control-Allow-Method'] = 'GET, POST, OPTIONS'
     resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
     return resp
 
@@ -40,7 +40,7 @@ def get_all_artifacts():
 
     resp = Response(content, mimetype='application/json')
     resp.headers['Access-Control-Allow-Origin'] = '*'
-    resp.headers['Access-Control-Allow-Method'] = 'GET, OPTIONS'
+    resp.headers['Access-Control-Allow-Method'] = 'GET, POST, OPTIONS'
     resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
 
     return resp
@@ -48,7 +48,12 @@ def get_all_artifacts():
 @app.route("/s/<short_url>", methods=["GET", "POST", "OPTIONS"])
 def redirect_url(short_url):
     """ Lookup long url from the short url and redirect the user """
-    return redirect(location="http://google.com", code=302)
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    url = (short_url,)
+    c.execute('SELECT LongUrl FROM items WHERE ShortUrl=?' , url)
+    response = c.fetchone()
+    return redirect(location=response[0], code=302)
 
 
 @app.route("/update_artifact", methods=["GET", "POST", "OPTIONS"])
@@ -65,7 +70,7 @@ def update_artifact():
 
     resp = Response(content, mimetype='application/json')
     resp.headers['Access-Control-Allow-Origin'] = '*'
-    resp.headers['Access-Control-Allow-Method'] = 'GET, OPTIONS'
+    resp.headers['Access-Control-Allow-Method'] = 'GET, POST, OPTIONS'
     resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
 
     return resp
