@@ -19,7 +19,7 @@ export default vo => `
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css">
     ${vo.cssBundle ? '<link rel="stylesheet" type="text/css" href="' + vo.cssBundle + '">' : ''}
 
-    <title>Universal React Starter Kyt</title>
+    <title>QR_iosities</title>
   </head>
 
   <body>

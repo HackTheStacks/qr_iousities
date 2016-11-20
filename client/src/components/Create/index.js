@@ -1,6 +1,7 @@
 
 import React from 'react';
 import axios from 'axios';
+import config from '../../config';
 // import styles from './styles.scss';
 
 class Create extends React.Component {
@@ -9,11 +10,13 @@ class Create extends React.Component {
 
     this.state = {
       artifactUrl: 'something',
-      artifact: null
+      artifact: null,
+      type: ''
     };
 
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
     this.handleOnChange = this.handleOnChange.bind(this);
+    this.handleClickDropdown = this.handleClickDropdown.bind(this);
   }
 
   handleOnChange(event) {
@@ -22,10 +25,16 @@ class Create extends React.Component {
     });
   }
 
+  handleClickDropdown(event) {
+    this.setState({
+      type: event.target.value
+    })
+  }
+
   handleOnSubmit(event) {
     event.preventDefault();
 
-    axios.post('/get_artifact', {
+    axios.post(`${config.apiUrl}/get_artifact`, {
       longUrl: this.state.artifactUrl
     })
     .then((data) => {
@@ -53,6 +62,9 @@ class Create extends React.Component {
           <h1>Search</h1>
           <form onSubmit={this.handleOnSubmit}>
             <div>Please input the artifact you would like to find as a url.</div>
+            <select onChange={this.handleClickDropdown} value={this.state.type}>
+              <option value="BHL">BHL</option>
+            </select>
             <input type="text" value={this.state.artifactUrl} onChange={this.handleOnChange} className="searchBar" />
             <input type="submit" value="Search"/>
           </form>
