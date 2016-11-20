@@ -11,7 +11,8 @@ fi
 
 # Set application's environment variables
 export FLASK_DEBUG=1
+export PORT=8000
 export FLASK_APP=app.py
 
 # Start the app
-python -m flask run
+python -m flask run --port $PORT
