@@ -16,6 +16,7 @@
 
 .success {
   background-color: #22C23B;
+  color: white;
 }
 
 .error {
@@ -55,4 +56,9 @@
 
 .searchButton:hover {
   background-color: #002684;
+}
+
+.qrcode {
+  width: 450px;
+  height: 450px;
 }

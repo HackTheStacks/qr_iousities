@@ -7,7 +7,7 @@ import styles from './styles.scss';
 
 const FORMATS_BY_TYPE = {
     BHL: {
-        regex: new RegExp('http://www.biodiversitylibrary.org/page'),
+        regex: new RegExp('https://www.biodiversitylibrary.org/item'),
         examples: [
             'https://www.biodiversitylibrary.org/item/16800',
             'https://www.biodiversitylibrary.org/item/16800#page/5/mode/1up'
@@ -20,7 +20,7 @@ class Create extends React.Component {
     super(props);
 
     this.state = {
-      artifactUrl: 'something',
+      artifactUrl: '',
       artifact: null,
       type: 'BHL',
       status: null
@@ -55,14 +55,15 @@ class Create extends React.Component {
 
 
     axios.post(`${config.apiUrl}/get_artifact`, {
-      longUrl: this.state.artifactUrl
+      longUrl: this.state.artifactUrl,
+      type: this.state.artifactUrl
     })
-    .then((data) => {
-      console.log(data);
+    .then((resp) => {
       this.setState({
-          artifact: data,
+          artifact: resp.data,
           status: 'success'
-      })
+      });
+      this.getQRCode();
     })
     .catch((err) => {
       console.log(err);
@@ -100,7 +101,23 @@ class Create extends React.Component {
     );
   }
 
+  getQRCode() {
+      console.info(this.state.artifact);
+    console.info(`${config.apiUrl}/get_qrimg/${this.state.artifact.ShortUrl}`);
+    axios.get(`${config.apiUrl}/get_qrimg/${this.state.artifact.ShortUrl}`)
+    .then((resp) => {
+      this.setState({
+          qrCode: resp.data,
+      })
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  }
+
     render() {
+        const placeholder = `e.g. ${FORMATS_BY_TYPE[this.state.type].examples[0]}`;
+        const qrCode = this.state.qrCode ? <img className={styles.qrcode} src={this.state.qrCode}/> : null;
         let message;
         switch(this.state.status) {
           case 'error': message = this.getErrorMessage(); break;
@@ -118,11 +135,11 @@ class Create extends React.Component {
                 <select onChange={this.handleClickDropdown} value={this.state.type}>
                   <option value="BHL">BHL</option>
                 </select>
-                <input type="text" value={this.state.artifactUrl} onChange={this.handleOnChange} className={styles.searchInput} />
+                <input type="text" placeholder={placeholder} value={this.state.artifactUrl} onChange={this.handleOnChange} className={styles.searchInput} />
                 <input type="submit" value="Save" className={styles.searchButton}/>
               </div>
           </form>
-          {this.state.artifact ? this.handleResults : null}
+          {qrCode}
         </section>
     );
   }

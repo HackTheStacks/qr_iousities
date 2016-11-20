@@ -59,17 +59,19 @@ class List extends React.Component {
         });
       }
 
-      return (
-          <div className={styles.container}>
-            <Link to="/create"><button>Create a new QA code</button></Link>
-              <div className={styles.header}>
-                  <div className={styles.name}>Name</div>
-                  <div className={styles.url}>URL</div>
-                  <div className={styles.shortUrl}>Short URL</div>
-              </div>
-              {artifacts}
-          </div>
-      );
+        return (
+            <div className={styles.container}>
+                <div className={styles.meta}>
+                  <Link className={styles.button} to="/create">Create a new QA code</Link>
+                </div>
+                <div className={styles.header}>
+                    <div className={styles.name}>Name</div>
+                    <div className={styles.url}>URL</div>
+                    <div className={styles.shortUrl}>Short URL</div>
+                </div>
+                {artifacts}
+            </div>
+        );
     }
 }
 
