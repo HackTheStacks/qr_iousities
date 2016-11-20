@@ -5,7 +5,7 @@ import logging
 import json
 import sqlite3
 
-from flask import Flask ,redirect
+from flask import Flask ,redirect, request
 app = Flask(__name__)
 
 @app.route("/get_artifact", methods=["GET", "POST", "OPTIONS"])
