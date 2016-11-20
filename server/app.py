@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 
+
 import qrcode
 import qrcode.image.svg
 import sys
@@ -8,6 +9,7 @@ import logging
 import json
 import sqlite3
 import os
+import cStringIO
 
 from flask import Flask, redirect, request, Response
 from flask import send_file
@@ -86,7 +88,8 @@ def get_level(level):
     else:
         return logging.INFO
 
-@app.route("/qrcode")
+@app.route('/get_qrimg')
+
 def gen_qr_code(url):
 	factory = qrcode.image.svg.SvgImage
     qr = qrcode.QRCode(box_size=10,
@@ -94,8 +97,16 @@ def gen_qr_code(url):
     qr.add_data(url)
     qr.make(fit=True)
     img = qr.make_image()
-
     return img
+
+
+def get_qrimg(url):
+    img_buf = cStringIO.StringIO()
+    img = gen_qr_code(url)
+    img.save(img_buf)
+	im_data = img_buf.getvalue()
+	data_url = 'data:image/svg+xml;base64,' + base64.encodestring(im_data)
+    return data_url
 
 
 if __name__ == '__main__':
