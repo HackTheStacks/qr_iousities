@@ -15,9 +15,7 @@ import time
 from flask import Flask, redirect, request, Response
 from database import DB
 
-sys.append("/artifactObjects")
-
-from BHL import BHLObject
+from artifactObjects.BHL import BHLObject
 
 app = Flask(__name__)
 db = DB()
