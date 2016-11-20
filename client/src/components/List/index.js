@@ -60,7 +60,6 @@ class List extends React.Component {
                 </div>
                 <div className={styles.header}>
                     <div className={styles.name}>Name</div>
-                    <div className={styles.qrcode}>QR Code</div>
                     <div className={styles.url}>URL</div>
                     <div className={styles.shortUrl}>Short URL</div>
                     <div className={styles.delete}>Delete</div>
