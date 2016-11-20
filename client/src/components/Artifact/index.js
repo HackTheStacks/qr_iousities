@@ -8,9 +8,10 @@ class Artifact extends Component {
       const {itemId} = this.props;
         return (
             <div className={styles.row}>
-                <Link to={{ pathname: `/edit/${itemId}`}}><div className={styles.Title}>{this.props.title}</div></Link>
-                <div className={styles.shortUrl}>{this.props.shortUrl}</div>
+                <div className={styles.name}><Link to={{ pathname: `/edit/${itemId}`}}>{this.props.title}</Link></div>
                 <div className={styles.url}>{this.props.longUrl}</div>
+                <div className={styles.shortUrl}>{this.props.shortUrl}</div>
+                <div className={styles.stats}><Link to={{ pathname: `/stats/${itemId}`}}>📊</Link></div>
             </div>
         );
     }
