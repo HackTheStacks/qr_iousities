@@ -1,8 +1,12 @@
 
 import React from 'react';
-import styles from './styles.scss';
-import Artifact from '../Artifact';
+import {Link} from 'react-router';
 import axios from 'axios';
+
+import styles from './styles.scss';
+
+import Artifact from '../Artifact';
+
 import config from '../../config';
 
 class List extends React.Component {
@@ -47,6 +51,7 @@ class List extends React.Component {
 
         return (
             <div className={styles.container}>
+              <Link to="/create"><button>Create a new QA code</button></Link>
                 <div className={styles.header}>
                     <div className={styles.name}>Name</div>
                     <div className={styles.qrcode}>QR Code</div>
