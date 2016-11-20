@@ -45,7 +45,7 @@ def get_artifact():
 	    item_id = (bhl.parseID(item_url,)
             item = db.query('SELECT * FROM items WHERE LongUrl=?', item_id, True)
             if not item == None:
-                artifact['id'] = item[0]
+                artifact['tableId'] = item[0]
                 artifact['itemId'] = item[1]
                 artifact['title'] = item[2]
                 artifact['descriptor'] = item[3]
@@ -74,7 +74,7 @@ def get_all_artifacts():
     if not response == None:
         for item in response:
             artifact = {}
-            artifact['id'] = item[0]
+            artifact['tableId'] = item[0]
             artifact['itemId'] = item[1]
             artifact['title'] = item[2]
             artifact['descriptor'] = item[3]
