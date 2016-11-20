@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 
+
 import qrcode
 import qrcode.image.svg
 import sys
@@ -95,9 +96,6 @@ def get_level(level):
     else:
         return logging.INFO
 
-
-
-
 def gen_qr_code(url):
 
     """
@@ -111,9 +109,7 @@ def gen_qr_code(url):
     qr.add_data(url)
     qr.make(fit=True)
     img = qr.make_image()
-
     return img
-
 
 @app.route('/get_qrimg/<url>')
 def get_qrimg(url):
