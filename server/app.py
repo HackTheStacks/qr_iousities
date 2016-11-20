@@ -145,7 +145,7 @@ def create_artifact():
     tableId = db.getNextTableID()
     db.execute_cmd('INSERT INTO items VALUES (?,?,?,?,?,?)', (tableId, itemId, title, descriptor, short_url, long_url), True)
     response = db.query('SELECT * FROM items WHERE ItemId = ?', (itemId,))
-    artifacts = [] 
+    artifacts = []
     if not response == None:
         for item in response:
 	    artifact = {}
@@ -174,7 +174,6 @@ def update_artifact():
         itemId = bhl.parseId(data['itemUrl'])
         short_url = shortener.id_to_short(itemId)
         db.execute_cmd('UPDATE items SET LongUrl = ? WHERE ItemID = ?', (long_url,itemId))
-	db.	
     response = db.query('SELECT * FROM items WHERE ItemId = ?', (itemId,))
     if not response == None:
       artifacts = []
@@ -189,7 +188,7 @@ def update_artifact():
 	    artifacts.append(artifact)
 
     content = json.dumps(artifacts)
-    
+
     return json_resp(content)
 
 
