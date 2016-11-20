@@ -11,3 +11,5 @@ fi
 
 # Install the app's dependencies
 pip install -r requirements.txt
+
+python add_qrtable.py
