@@ -101,6 +101,7 @@ def get_level(level):
 
 
 def gen_qr_code(url):
+<<<<<<< b68f95c136390f5d8dd6eb0ebe854670dc4e9ae7
     """
     use qrcode library to generate qrcode
     input: url (supposed to be the url from BHL)
@@ -109,15 +110,31 @@ def gen_qr_code(url):
 
     factory = qrcode.image.svg.SvgImage
     qr = qrcode.QRCode(box_size=10, border=4, image_factory=factory,)
+=======
+	"""
+	use qrcode library to generate qrcode
+	input: url (supposed to be the url from BHL)
+	output: img_object generate which represents the qrcode
+	"""
+
+	factory = qrcode.image.svg.SvgImage
+    qr = qrcode.QRCode(box_size=10,
+						der=4,image_factory=factory,)
+>>>>>>> add comments
     qr.add_data(url)
     qr.make(fit=True)
     img = qr.make_image()
 
+<<<<<<< b68f95c136390f5d8dd6eb0ebe854670dc4e9ae7
     return img
+=======
+	return img
+>>>>>>> add comments
 
 
 @app.route('/get_qrimg/<url>')
 def get_qrimg(url):
+<<<<<<< b68f95c136390f5d8dd6eb0ebe854670dc4e9ae7
     """
     transfer QRcode to base64 format
     input: url (supposed to be the url from BHL)
@@ -135,6 +152,20 @@ def get_qrimg(url):
     resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
     return resp
 
+=======
+	"""
+	transfer QRcode to base64 format
+	input: url (supposed to be the url from BHL)
+	output: img_url which represents the qrcode
+	"""
+	img_buf = cStringIO.StringIO()
+    img = gen_qr_code(url)
+    img.save(img_buf)
+	im_data = img_buf.getvalue()
+	data_url = 'data:image/svg+xml;base64,' + base64.encodestring(im_data)
+
+	return data_url
+>>>>>>> add comments
 
 
 if __name__ == '__main__':
