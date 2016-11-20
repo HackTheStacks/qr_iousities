@@ -26,7 +26,8 @@ class DB():
         cur.close()
         return (results[0] if results else None) if one else results
 
-    def delete(self, query, args=(), one=False):
+    def execute(self, query, args=(), one=False):
         cur = self.db.execute(query, args)
         cur.close()
-        return "Success deleting item"
+        return "Success executing query"
+
