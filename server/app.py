@@ -46,7 +46,7 @@ def get_artifact():
             item = db.query('SELECT * FROM items WHERE LongUrl=?', item_id, True)
             if not item == None:
                 artifact['id'] = item[0]
-                artifact['itemID'] = item[1]
+                artifact['itemId'] = item[1]
                 artifact['title'] = item[2]
                 artifact['descriptor'] = item[3]
                 artifact['shortUrl'] = item[4]
@@ -75,7 +75,7 @@ def get_all_artifacts():
         for item in response:
             artifact = {}
             artifact['id'] = item[0]
-            artifact['itemID'] = item[1]
+            artifact['itemId'] = item[1]
             artifact['title'] = item[2]
             artifact['descriptor'] = item[3]
             artifact['shortUrl'] = item[4]
