@@ -125,7 +125,9 @@ class Create extends React.Component {
 
       return (
         <section>
-          <Link to="/"><button>Return to home</button></Link>
+            <div className={styles.meta}>
+                <Link to="/">Return to home</Link>
+            </div>
           <h1>Create</h1>
           {message}
           <form onSubmit={this.handleOnSubmit}>
