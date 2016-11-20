@@ -95,11 +95,11 @@ def get_level(level):
     else:
         return logging.INFO
 
-<<<<<<< e0bb262bce5f7eeeef204dccc27d27f9ea97dd5d
 
 
 
 def gen_qr_code(url):
+
     """
     use qrcode library to generate qrcode
     input: url (supposed to be the url from BHL)
