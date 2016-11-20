@@ -5,7 +5,7 @@ import axios from 'axios';
 import config from '../../config';
 // import styles from './styles.scss';
 
-class Create extends React.Component {
+class Manage extends React.Component {
   constructor(props) {
     super(props);
 
@@ -75,4 +75,4 @@ class Create extends React.Component {
     );
   }
 }
-export default Create;
+export default Manage;

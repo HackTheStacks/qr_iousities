@@ -51,7 +51,7 @@ class List extends React.Component {
 
         return (
             <div className={styles.container}>
-              <Link to="/create"><button>Create a new QA code</button></Link>
+              <Link to="/manage"><button>Create a new QA code</button></Link>
                 <div className={styles.header}>
                     <div className={styles.name}>Name</div>
                     <div className={styles.qrcode}>QR Code</div>
