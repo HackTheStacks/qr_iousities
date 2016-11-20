@@ -109,6 +109,7 @@ def gen_qr_code(url):
     qr.add_data(url)
     qr.make(fit=True)
     img = qr.make_image()
+    
     return img
 
 @app.route('/get_qrimg/<url>')
