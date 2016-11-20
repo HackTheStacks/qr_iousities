@@ -113,7 +113,7 @@ def delete_artifact():
     content = ""
     if not data == None and 'Id' in data:
         ItemID = data['Id']
-        response = db.delete('DELETE FROM items WHERE TableID=?', ItemID, True)
+        response = db.execute_cmd('DELETE FROM items WHERE TableID=?', ItemID, True)
         content = json.dumps(response)
     else:
         content = "Failure deleting Item from the DB"
