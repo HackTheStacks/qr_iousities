@@ -45,12 +45,12 @@ def get_artifact():
 	    item_id = (bhl.parseID(item_url,)
             item = db.query('SELECT * FROM items WHERE LongUrl=?', item_id, True)
             if not item == None:
-                artifact['Id'] = item[0]
-                artifact['ItemID'] = item[1]
-                artifact['Title'] = item[2]
-                artifact['Descriptor'] = item[3]
-                artifact['ShortUrl'] = item[4]
-                artifact['LongUrl'] = item[5]
+                artifact['id'] = item[0]
+                artifact['itemID'] = item[1]
+                artifact['title'] = item[2]
+                artifact['descriptor'] = item[3]
+                artifact['shortUrl'] = item[4]
+                artifact['longUrl'] = item[5]
 
                 content = artifact
             else:
@@ -74,12 +74,12 @@ def get_all_artifacts():
     if not response == None:
         for item in response:
             artifact = {}
-            artifact['Id'] = item[0]
-            artifact['ItemID'] = item[1]
-            artifact['Title'] = item[2]
-            artifact['Descriptor'] = item[3]
-            artifact['ShortUrl'] = item[4]
-            artifact['LongUrl'] = item[5]
+            artifact['id'] = item[0]
+            artifact['itemID'] = item[1]
+            artifact['title'] = item[2]
+            artifact['descriptor'] = item[3]
+            artifact['shortUrl'] = item[4]
+            artifact['longUrl'] = item[5]
             artifacts.append(artifact)
 
     content = json.dumps(artifacts)
@@ -106,8 +106,8 @@ def update_artifact():
         itemId = bhl.parseId(data['itemUrl'])
 	(author, title, year) = bhl.getArtifactData(itemId)
 	descriptor = {}
-        descriptor['Author'] = author
-	descriptor['Year'] = year
+        descriptor['author'] = author
+	descriptor['year'] = year
 	short_url = shortener.id_to_short(itemId)
 	tableId = db.getNextTableID()
 	db.execute_cmd('INSERT INTO items VALUES (?,?,?,?,?,?)', (tableId, itemId, title, descriptor, short_url, long_url), 
