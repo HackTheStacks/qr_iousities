@@ -4,7 +4,7 @@ import {browserHistory, Link} from 'react-router';
 import axios from 'axios';
 import config from '../../config';
 import routes from '../../routes';
-// import styles from './styles.scss';
+import styles from './styles.scss';
 
 class Create extends React.Component {
   constructor(props) {
@@ -104,20 +104,28 @@ class Create extends React.Component {
   render() {
     return (
       <section>
-        <Link to="/"><button>Return to home</button></Link>
+        <div className={styles.meta}>
+          <Link to="/">Return to home</Link>
+        </div>
         <h1>Manage</h1>
         {this.state.artifact ? this.displayArtifact() : null}
-        <form onSubmit={this.handlePrint}>
-          <input type="submit" value="Print this QR code" />
-        </form>
         <form onSubmit={this.handleOnSubmit}>
           <div>Please input the new url the QA code that item: {this.props.params.itemId} will redirect to</div>
-          <input type="text" value={this.state.LongUrl} onChange={this.handleOnChange} className="searchBar" />
-          <input type="submit" value="Update"/>
+          <br />
+          <div className={styles.searchInputContainer}>
+            <input className={styles.searchInput} type="text" value={this.state.LongUrl} onChange={this.handleOnChange} />
+            <input className={styles.searchButton} type="submit" value="Update" />
+          </div>
         </form>
-        <form onSubmit={this.handleDelete}>
-          <input type="submit" value="Delete this QR code" />
-        </form>
+        <br />
+        <div className={styles.optionsInputContainer}>
+          <form onSubmit={this.handlePrint}>
+            <input className={styles.printButton} type="submit" value="Print this QR code" />
+          </form>
+          <form onSubmit={this.handleDelete}>
+            <input className={styles.deleteButton} type="submit" value="Delete this QR code" />
+          </form>
+        </div>
       </section>
   )}
 }
