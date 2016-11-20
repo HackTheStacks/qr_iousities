@@ -55,12 +55,6 @@ def get_artifact():
                 content = artifact
             else:
 		content = "Item not found"
-#                itemID = bhl.parseID(long_url)
-#                [author, title, year] = bhl.getArtifactData(itemID)
-#                descriptor = {}
-#                descriptor['Author'] = author
-#                descriptor['Year'] = year
-#                item = db.query('INSERT INTO items ', url, False)
         else:
             content = "Invalid URL"
 
@@ -111,8 +105,6 @@ def update_artifact():
 	short_url = shortener.id_to_short(itemId)
 	tableId = db.getNextTableID()
 	db.execute_cmd('INSERT INTO items VALUES (?,?,?,?,?,?)', (tableId, itemId, title, descriptor, short_url, long_url), 
-#    content = json.dumps(data)
-
     return json_resp(content)
 
 @app.route("/delete_artifact", methods=["GET", "POST", "OPTIONS"])
