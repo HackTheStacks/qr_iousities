@@ -11,9 +11,11 @@ import add_qrtable
 
 from flask import Flask, redirect, request, Response
 from database import DB
+from shortener import Shortener
 
 app = Flask(__name__)
 db = DB()
+shortener = Shortener()
 
 # @app.teardown_appcontext
 # def close_connection(exception):
