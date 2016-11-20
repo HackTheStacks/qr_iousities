@@ -3,7 +3,6 @@ import _ from 'lodash';
 import styles from './styles.scss';
 import axios from 'axios';
 import config from '../../config';
-
 import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts';
 
 class Stats extends Component {
