@@ -53,8 +53,10 @@ def get_artifact():
                 artifact['longUrl'] = item[5]
 
                 content = artifact
-            else:
+	    else:
 		content = "Item not found"
+	#else if xeac.validateUrl(item_url):
+	#etc
         else:
             content = "Invalid URL"
 
@@ -96,12 +98,17 @@ def redirect_url(short_url):
 def update_artifact():
     data = request.get_json()
     if (not data == None) and ('longUrl' in data) and ('itemUrl' in data):
-        long_url = data['longUrl']
-        itemId = bhl.parseId(data['itemUrl'])
-	(author, title, year) = bhl.getArtifactData(itemId)
-	descriptor = {}
-        descriptor['author'] = author
-	descriptor['year'] = year
+	long_url = data['longUrl']
+	itemId = ""
+	title = ""
+	descriptor = ""
+
+	if bhl.validateUrl(item_url):
+	  itemId = bhl.parseId(data['itemUrl'])
+	  (author, title, year) = bhl.getArtifactData(itemId)
+	  descriptor = {}
+	  descriptor['author'] = author
+	  descriptor['year'] = year
 	short_url = shortener.id_to_short(itemId)
 	tableId = db.getNextTableID()
 	db.execute_cmd('INSERT INTO items VALUES (?,?,?,?,?,?)', (tableId, itemId, title, descriptor, short_url, long_url), 
