@@ -48,12 +48,12 @@ class List extends React.Component {
             return (
               <Artifact
                 key={a.Id}
-                id={a.Id}
-                itemId={a.ItemID}
+                Id={a.Id}
+                ItemId={a.ItemID}
                 Title={a.Title}
-                descriptor={a.Descriptor}
-                shortUrl={a.ShortUrl}
-                url={a.LongUrl}
+                Descriptor={a.Descriptor}
+                ShortUrl={a.ShortUrl}
+                LongUrl={a.LongUrl}
               />
             )
         });
