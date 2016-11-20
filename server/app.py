@@ -33,12 +33,13 @@ def get_artifact():
         url = (long_url,)
         c.execute('SELECT * FROM items WHERE LongUrl=?' , url)
         response = c.fetchone()
-        artifact['Id'] = response[0]
-        artifact['ItemID'] = response[1]
-        artifact['Title'] = response[2]
-        artifact['Descriptor'] = response[3]
-        artifact['ShortUrl'] = response[4]
-        artifact['LongUrl'] = response[5]
+        if not response == None:
+            artifact['Id'] = response[0]
+            artifact['ItemID'] = response[1]
+            artifact['Title'] = response[2]
+            artifact['Descriptor'] = response[3]
+            artifact['ShortUrl'] = response[4]
+            artifact['LongUrl'] = response[5]
 
     content = json.dumps(artifact)
 
@@ -57,15 +58,16 @@ def get_all_artifacts():
     response = c.fetchall()
 
     artifacts = []
-    for item in response:
-        artifact = {}
-        artifact['Id'] = item[0]
-        artifact['ItemID'] = item[1]
-        artifact['Title'] = item[2]
-        artifact['Descriptor'] = item[3]
-        artifact['ShortUrl'] = item[4]
-        artifact['LongUrl'] = item[5]
-        artifacts.append(artifact)
+    if not response == None:
+        for item in response:
+            artifact = {}
+            artifact['Id'] = item[0]
+            artifact['ItemID'] = item[1]
+            artifact['Title'] = item[2]
+            artifact['Descriptor'] = item[3]
+            artifact['ShortUrl'] = item[4]
+            artifact['LongUrl'] = item[5]
+            artifacts.append(artifact)
 
     content = json.dumps(artifacts)
 
