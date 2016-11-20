@@ -7,7 +7,6 @@ import json
 import os
 import cStringIO
 import base64
-import add_qrtable
 import time
 import sys
 
@@ -170,7 +169,7 @@ def gen_qr_code(url):
     qr.add_data(url)
     qr.make(fit=True)
     img = qr.make_image()
-    
+
     return img
 
 @app.route('/get_qrimg/<url>')
@@ -182,24 +181,20 @@ def get_qrimg(url):
     output: img_url which represents the qrcode
     """
     img_buf = cStringIO.StringIO()
-    conn = sqlite3.connect('database.db')
+    check = db.query("SELECT qrcode_base FROM qrcode WHERE shortUrl = ?",url)
 
-    add_qrtable.create_table(conn)
-    c = conn.cursor()
-    c.execute("SELECT EXISTS(SELECT qrcode_base FROM qrcode WHERE shortUrl = ?)",(url,))
-    check_data=c.fetchone()
-    print check_data
-    if check_data[0] == 0:
+    if check == None:
         print "i dont have value"
         img = gen_qr_code(url)
         img.save(img_buf)
         im_data = img_buf.getvalue()
         data_url = 'data:image/svg+xml;base64,' + base64.encodestring(im_data)
         content = json.dumps(data_url.strip())
-        c.execute("INSERT OR IGNORE INTO qrcode(shortUrl, qrcode_base) VALUES(?, ?)",(url,content))
-        conn.commit()
+        db.query("INSERT OR IGNORE INTO qrcode(shortUrl, qrcode_base) VALUES(?, ?)",(url,content))
     else:
-        content = check_data[0]
+        content = check[0]
+        print content
+
     resp = Response(content, mimetype='application/json')
     resp.headers['Access-Control-Allow-Origin'] = '*'
     resp.headers['Access-Control-Allow-Method'] = 'GET, OPTIONS'
