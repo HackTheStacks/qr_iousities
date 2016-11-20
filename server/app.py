@@ -144,6 +144,19 @@ def create_artifact():
     short_url = shortener.id_to_short(itemId)
     tableId = db.getNextTableID()
     db.execute_cmd('INSERT INTO items VALUES (?,?,?,?,?,?)', (tableId, itemId, title, descriptor, short_url, long_url), True)
+    response = db.query('SELECT * FROM items WHERE ItemId = ?', (itemId,))
+    if not response == None:
+        for item in response:
+	    artifact = {}
+	    artifact['tableId'] = item[0]
+	    artifact['itemId'] = item[1]
+	    artifact['title'] = item[2]
+	    artifact['descriptor'] = item[3]
+	    artifact['shortUrl'] = item[4]
+	    artifact['longUrl'] = item[5]
+	    artifacts.append(artifact)
+
+    content = json.dumps(artifacts)
     return json_resp(content)
 
 @app.route("/update_artifact", methods=["GET", "POST", "OPTIONS"])
@@ -175,7 +188,7 @@ def update_artifact():
 
     content = json.dumps(artifacts)
     
-    return json_resp(resp)
+    return json_resp(content)
 
 
 @app.route("/delete_artifact", methods=["GET", "POST", "OPTIONS"])
