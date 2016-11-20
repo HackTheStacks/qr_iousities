@@ -62,10 +62,6 @@ def get_artifact():
             content = "Invalid URL"
 
     response = json.dumps(content)
-    resp = Response(content, mimetype='application/json')
-    resp.headers['Access-Control-Allow-Origin'] = '*'
-    resp.headers['Access-Control-Allow-Method'] = 'GET, POST, OPTIONS'
-    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
     return json_resp(content)
 
 @app.route("/get_all_artifacts", methods=["GET", "OPTIONS"])
@@ -84,11 +80,6 @@ def get_all_artifacts():
             artifacts.append(artifact)
 
     content = json.dumps(artifacts)
-    resp = Response(content, mimetype='application/json')
-    resp.headers['Access-Control-Allow-Origin'] = '*'
-    resp.headers['Access-Control-Allow-Method'] = 'GET, POST, OPTIONS'
-    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
-
     return json_resp(content)
 
 
@@ -106,11 +97,6 @@ def stats(table_id):
             stats.append(stats)
 
     content = json.dumps(artifacts)
-    resp = Response(content, mimetype='application/json')
-    resp.headers['Access-Control-Allow-Origin'] = '*'
-    resp.headers['Access-Control-Allow-Method'] = 'GET, POST, OPTIONS'
-    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
-
     return json_resp(content)
 
 
@@ -158,10 +144,6 @@ def create_artifact():
     short_url = shortener.id_to_short(itemId)
     tableId = db.getNextTableID()
     db.execute_cmd('INSERT INTO items VALUES (?,?,?,?,?,?)', (tableId, itemId, title, descriptor, short_url, long_url), True)
-    resp = Response(content, mimetype='application/json')
-    resp.headers['Access-Control-Allow-Origin'] = '*'
-    resp.headers['Access-Control-Allow-Method'] = 'GET, POST, OPTIONS'
-    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
     return json_resp(content)
 
 @app.route("/update_artifact", methods=["GET", "POST", "OPTIONS"])
@@ -178,10 +160,21 @@ def update_artifact():
         itemId = bhl.parseId(data['itemUrl'])
         short_url = shortener.id_to_short(itemId)
         db.execute_cmd('UPDATE items SET LongUrl = ? WHERE ItemID = ?', (long_url,itemId))
-    resp = Response(content, mimetype='application/json')
-    resp.headers['Access-Control-Allow-Origin'] = '*'
-    resp.headers['Access-Control-Allow-Method'] = 'GET, POST, OPTIONS'
-    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+	db.	
+    response = db.query('SELECT * FROM items WHERE ItemId = ?', (itemId,))
+    if not response == None:
+        for item in response:
+	    artifact = {}
+	    artifact['tableId'] = item[0]
+	    artifact['itemId'] = item[1]
+	    artifact['title'] = item[2]
+	    artifact['descriptor'] = item[3]
+	    artifact['shortUrl'] = item[4]
+	    artifact['longUrl'] = item[5]
+	    artifacts.append(artifact)
+
+    content = json.dumps(artifacts)
+    
     return json_resp(resp)
 
 
