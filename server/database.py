@@ -38,7 +38,13 @@ class DB():
         self.db.commit()
         cur.close()
 
-    def delete(self, query, args=(), one=False):
+    def execute_cmd(self, query, args=(), one=False):
         cur = self.db.execute(query, args)
         cur.close()
-        return "Success deleting item"
+        return "Success executing query"
+
+    def getNextTableID(self):
+        query = 'SELECT Max(TableID) from items'
+        cur = self.db.execute(query, ())
+        nextID = cur.fetchone()[0] + 1
+        return nextID
