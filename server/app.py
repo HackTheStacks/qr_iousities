@@ -62,6 +62,10 @@ def get_artifact():
             content = "Invalid URL"
 
     response = json.dumps(content)
+    resp = Response(content, mimetype='application/json')
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    resp.headers['Access-Control-Allow-Method'] = 'GET, POST, OPTIONS'
+    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
     return json_resp(content)
 
 @app.route("/get_all_artifacts", methods=["GET", "OPTIONS"])
@@ -80,6 +84,10 @@ def get_all_artifacts():
             artifacts.append(artifact)
 
     content = json.dumps(artifacts)
+    resp = Response(content, mimetype='application/json')
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    resp.headers['Access-Control-Allow-Method'] = 'GET, POST, OPTIONS'
+    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
 
     return json_resp(content)
 
@@ -98,6 +106,10 @@ def stats(table_id):
             stats.append(stats)
 
     content = json.dumps(artifacts)
+    resp = Response(content, mimetype='application/json')
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    resp.headers['Access-Control-Allow-Method'] = 'GET, POST, OPTIONS'
+    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
 
     return json_resp(content)
 
@@ -146,6 +158,10 @@ def create_artifact():
     short_url = shortener.id_to_short(itemId)
     tableId = db.getNextTableID()
     db.execute_cmd('INSERT INTO items VALUES (?,?,?,?,?,?)', (tableId, itemId, title, descriptor, short_url, long_url), True)
+    resp = Response(content, mimetype='application/json')
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    resp.headers['Access-Control-Allow-Method'] = 'GET, POST, OPTIONS'
+    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
     return json_resp(content)
 
 @app.route("/update_artifact", methods=["GET", "POST", "OPTIONS"])
@@ -162,6 +178,10 @@ def update_artifact():
         itemId = bhl.parseId(data['itemUrl'])
         short_url = shortener.id_to_short(itemId)
         db.execute_cmd('UPDATE items SET LongUrl = ? WHERE ItemID = ?', (long_url,itemId))
+    resp = Response(content, mimetype='application/json')
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    resp.headers['Access-Control-Allow-Method'] = 'GET, POST, OPTIONS'
+    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
     return json_resp(content)
 
 
