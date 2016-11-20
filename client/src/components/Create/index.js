@@ -7,7 +7,7 @@ import styles from './styles.scss';
 
 const FORMATS_BY_TYPE = {
     BHL: {
-        regex: new RegExp('https://www.biodiversitylibrary.org/item'),
+        regex: new RegExp('.*'),
         examples: [
             'https://www.biodiversitylibrary.org/item/16800',
             'https://www.biodiversitylibrary.org/item/16800#page/5/mode/1up'
@@ -58,11 +58,12 @@ class Create extends React.Component {
       longUrl: this.state.artifactUrl,
       type: this.state.artifactUrl
     })
-    .then((data) => {
+    .then((resp) => {
       this.setState({
-          artifact: data,
+          artifact: resp.data,
           status: 'success'
-      })
+      });
+      this.getQRCode();
     })
     .catch((err) => {
       console.log(err);
@@ -101,10 +102,22 @@ class Create extends React.Component {
   }
 
   getQRCode() {
+      console.info(this.state.artifact);
+    console.info(`${config.apiUrl}/get_qrimg/${this.state.artifact.ShortUrl}`);
+    axios.get(`${config.apiUrl}/get_qrimg/${this.state.artifact.ShortUrl}`)
+    .then((resp) => {
+      this.setState({
+          qrCode: resp.data,
+      })
+    })
+    .catch((err) => {
+      console.log(err);
+    })
   }
 
     render() {
         const placeholder = `e.g. ${FORMATS_BY_TYPE[this.state.type].examples[0]}`;
+        const qrCode = this.state.qrCode ? <img className={styles.qrcode} src={this.state.qrCode}/> : null;
         let message;
         switch(this.state.status) {
           case 'error': message = this.getErrorMessage(); break;
@@ -126,7 +139,7 @@ class Create extends React.Component {
                 <input type="submit" value="Save" className={styles.searchButton}/>
               </div>
           </form>
-          {this.getQRCode()}
+          {qrCode}
         </section>
     );
   }
