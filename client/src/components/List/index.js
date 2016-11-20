@@ -24,7 +24,7 @@ class List extends React.Component {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         axios
             .get(`${config.apiUrl}/get_all_artifacts`)
             .then(resp => {

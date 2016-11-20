@@ -30,6 +30,6 @@ if __name__ == '__main__':
 
     db.executemany('''INSERT INTO items(ItemID, Name, Descriptor, ShortUrl, LongUrl) VALUES (?,?,?,?,?)''', items)
 
-    stats = [(randint(1,6), int(time.time()) - randint(1, 86400000)) for i in range(100006)]
+    stats = [(randint(1,6), int(time.time()) - randint(1, 86400)) for i in range(100006)]
 
     db.executemany('''INSERT INTO stats(TableId, CreatedAt) VALUES (?,?)''', stats)
