@@ -14,9 +14,9 @@ class BHLObject(baseArtifact):
         else:
             return False
 
-    def parseID(self):
+    def parseID(self,url):
         """Parse out Item ID from URL"""
-        splitURL = (self.url).split("/")
+        splitURL = (url).split("/")
         itemID = splitURL[4].split('#')[0]
         return itemID
 
