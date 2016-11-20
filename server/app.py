@@ -11,7 +11,6 @@ import sys
 from shortener import Shortener
 import add_qrtable
 import time
-from math import floor
 from itertools import groupby
 
 from flask import Flask, redirect, request, Response
