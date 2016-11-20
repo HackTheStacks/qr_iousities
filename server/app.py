@@ -182,7 +182,7 @@ def update_artifact():
     resp.headers['Access-Control-Allow-Origin'] = '*'
     resp.headers['Access-Control-Allow-Method'] = 'GET, POST, OPTIONS'
     resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
-    return json_resp(content)
+    return json_resp(resp)
 
 
 @app.route("/delete_artifact", methods=["GET", "POST", "OPTIONS"])
@@ -191,7 +191,7 @@ def delete_artifact():
     content = ""
     if not data == None and 'Id' in data:
         ItemID = data['Id']
-        response = db.execute_cmd('DELETE FROM items WHERE TableID=?', ItemID, True)
+        response = db.execute_cmd('DELETE FROM items WHERE ItemID=?', ItemID, True)
         content = json.dumps(response)
     else:
         content = "Failure deleting Item from the DB"
