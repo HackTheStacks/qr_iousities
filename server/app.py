@@ -53,11 +53,7 @@ def get_artifact():
 
     content = json.dumps(artifact)
 
-    resp = Response(content, mimetype='application/json')
-    resp.headers['Access-Control-Allow-Origin'] = '*'
-    resp.headers['Access-Control-Allow-Method'] = 'GET, POST, OPTIONS'
-    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
-    return resp
+    return json_resp(content)
 
 @app.route("/get_all_artifacts", methods=["GET", "OPTIONS"])
 def get_all_artifacts():
@@ -81,12 +77,7 @@ def get_all_artifacts():
 
     content = json.dumps(artifacts)
 
-    resp = Response(content, mimetype='application/json')
-    resp.headers['Access-Control-Allow-Origin'] = '*'
-    resp.headers['Access-Control-Allow-Method'] = 'GET, POST, OPTIONS'
-    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
-
-    return resp
+    return json_resp(content)
 
 @app.route("/s/<short_url>", methods=["GET", "POST", "OPTIONS"])
 def redirect_url(short_url):
@@ -108,12 +99,7 @@ def update_artifact():
 
     content = json.dumps(data)
 
-    resp = Response(content, mimetype='application/json')
-    resp.headers['Access-Control-Allow-Origin'] = '*'
-    resp.headers['Access-Control-Allow-Method'] = 'GET, POST, OPTIONS'
-    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
-
-    return resp
+    return json_resp(content)
 
 @app.route("/delete_artifact", methods=["GET", "POST", "OPTIONS"])
 def delete_artifact():
