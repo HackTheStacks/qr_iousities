@@ -11,11 +11,17 @@ import sqlite3
 import os
 import cStringIO
 import base64
+import sys
 
 from flask import Flask, redirect, request, Response
 from flask import send_file
 
+sys.path.append("/artifactObjects")
+
+from BHL import BHLObject 
+
 app = Flask(__name__)
+bhl = BHLObject()
 
 @app.route("/")
 def home():
@@ -25,23 +31,25 @@ def home():
 def get_artifact():
     data = request.get_json()
     artifact = {}
+    content = ""
     long_url = None
     if not data == None and 'longUrl' in data:
         long_url = data['longUrl']
-        conn = sqlite3.connect('database.db')
-        c = conn.cursor()
-        url = (long_url,)
-        c.execute('SELECT * FROM items WHERE LongUrl=?' , url)
-        response = c.fetchone()
-        if not response == None:
-            artifact['Id'] = response[0]
-            artifact['ItemID'] = response[1]
-            artifact['Title'] = response[2]
-            artifact['Descriptor'] = response[3]
-            artifact['ShortUrl'] = response[4]
-            artifact['LongUrl'] = response[5]
-
-    content = json.dumps(artifact)
+        if bhl.validate(long_url):
+            conn = sqlite3.connect('database.db')
+            c = conn.cursor()
+            url = (long_url,)
+            c.execute('SELECT * FROM items WHERE LongUrl=?' , url)
+            response = c.fetchone()
+            if not response == None:
+                artifact['Id'] = response[0]
+                artifact['ItemID'] = response[1]
+                artifact['Title'] = response[2]
+                artifact['Descriptor'] = response[3]
+                artifact['ShortUrl'] = response[4]
+                artifact['LongUrl'] = response[5]
+        else:
+            content = "Not valid URL"
 
     resp = Response(content, mimetype='application/json')
     resp.headers['Access-Control-Allow-Origin'] = '*'
