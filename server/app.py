@@ -42,8 +42,8 @@ def get_artifact():
     if not data == None and 'itemUrl' in data:
         item_url = data['itemUrl']
         if bhl.validateUrl(item_url):
-	    item_id = (bhl.parseID(item_url,)
-            item = db.query('SELECT * FROM items WHERE ItemID=?', item_id, True)
+	    item_id = (bhl.parseID(item_url))
+            item = db.query('SELECT * FROM items WHERE ItemID = ?', (item_id,), True)
             if not item == None:
                 artifact['tableId'] = item[0]
                 artifact['itemId'] = item[1]
@@ -88,7 +88,7 @@ def redirect_url(short_url):
     Lookup long url from the short url and redirect the user
     """
     url = (short_url,)
-    destination = db.query('SELECT LongUrl FROM items WHERE ShortUrl=?', url, True)
+    destination = db.query('SELECT LongUrl FROM items WHERE ShortUrl=?', (url,), True)
 
     # Requires the destination url to have `http(s)://` as a part of the url
     return redirect(location=destination[0], code=302)
@@ -97,36 +97,41 @@ def redirect_url(short_url):
 @app.route("/create_artifact", methods=["GET", "POST", "OPTIONS"])
 def create_artifact():
     data = request.get_json()
+    long_url = ""
+    itemUrl = ""
+    content = ""
     if (not data == None) and ('longUrl' in data) and ('itemUrl' in data):
-	long_url = data['longUrl']
-	itemId = ""
-	title = ""
-	descriptor = ""
+        long_url = data['longUrl']
+        itemUrl = data['itemUrl']
+    itemId = ""
+    title = ""
+    descriptor = ""
 
-	if bhl.validateUrl(item_url):
-	    itemId = bhl.parseId(data['itemUrl'])
-	    (author, title, year) = bhl.getArtifactData(itemId)
-	    descriptor = {}
-	    descriptor['author'] = author
-	    descriptor['year'] = year
-	short_url = shortener.id_to_short(itemId)
-	tableId = db.getNextTableID()
-	db.execute_cmd('INSERT INTO items VALUES (?,?,?,?,?,?)', (tableId, itemId, title, descriptor, short_url, long_url), 
+    if bhl.validateUrl(itemUrl):
+        itemId = bhl.parseId(data['itemUrl'])
+        (author, title, year) = bhl.getArtifactData(itemId)
+        descriptor = {}
+        descriptor['author'] = author
+        descriptor['year'] = year
+    short_url = shortener.id_to_short(itemId)
+    tableId = db.getNextTableID()
+    db.execute_cmd('INSERT INTO items VALUES (?,?,?,?,?,?)', (tableId, itemId, title, descriptor, short_url, long_url), True) 
     return json_resp(content)
 
 @app.route("/update_artifact", methods=["GET", "POST", "OPTIONS"])
 def update_artifact():
     data = request.get_json()
+    content = ""
     if (not data == None) and ('longUrl' in data) and ('itemUrl' in data):
-	long_url = data['longUrl']
-	itemId = ""
-	title = ""
-	descriptor = ""
+        long_url = data['longUrl']
+        itemId = ""
+        title = ""
+        descriptor = ""
 
-	if bhl.validateUrl(item_url):
-	    itemId = bhl.parseId(data['itemUrl'])
-	short_url = shortener.id_to_short(itemId)
-	db.execute_cmd('UPDATE items SET LongUrl = ? WHERE ItemID = ?', (long_url,itemId)) 
+    if bhl.validateUrl(item_url):
+        itemId = bhl.parseId(data['itemUrl'])
+        short_url = shortener.id_to_short(itemId)
+        db.execute_cmd('UPDATE items SET LongUrl = ? WHERE ItemID = ?', (long_url,itemId)) 
     return json_resp(content)
 
 
