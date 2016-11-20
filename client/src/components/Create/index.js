@@ -1,6 +1,7 @@
 
 import React from 'react';
 import axios from 'axios';
+import config from '../../config';
 // import styles from './styles.scss';
 
 class Create extends React.Component {
@@ -33,18 +34,18 @@ class Create extends React.Component {
   handleOnSubmit(event) {
     event.preventDefault();
 
-    // axios.post('/get_artifact', {
-    //   longUrl: this.state.artifactUrl
-    // })
-    // .then((data) => {
-    //   console.log(data);
-    //   this.setState({
-    //     artifact: data
-    //   })
-    // })
-    // .catch((err) => {
-    //   console.log(err);
-    // })
+    axios.post(`${config.apiUrl}/get_artifact`, {
+      longUrl: this.state.artifactUrl
+    })
+    .then((data) => {
+      console.log(data);
+      this.setState({
+        artifact: data
+      })
+    })
+    .catch((err) => {
+      console.log(err);
+    })
   };
 
 
