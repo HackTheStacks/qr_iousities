@@ -21,20 +21,28 @@ class Create extends React.Component {
 
     this.state = {
       itemId: '',
-      artifact: null,
+      artifactUrl: 'null',
       type: 'BHL',
       status: null
     };
 
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
-    this.handleOnChange = this.handleOnChange.bind(this);
+    this.handleOnArticleURLChange = this.handleOnArticleURLChange.bind(this);
+    this.handleOnItemIdChange = this.handleOnItemIdChange.bind(this);
   }
 
-  handleOnChange(event) {
+  handleOnArticleURLChange(event) {
     this.setState({
       artifactUrl: event.target.value
     });
   }
+
+  handleOnItemIdChange(event) {
+    this.setState({
+      itemId: event.target.value
+    });
+  }
+
 
   handleClickDropdown(event) {
     this.setState({
@@ -52,9 +60,9 @@ class Create extends React.Component {
         return;
     }
 
-    axios.post(`${config.apiUrl}/get_artifact`, {
+    axios.post(`${config.apiUrl}/create_artifact`, {
       itemId: this.state.itemId,
-      LongUrl: this.state.artifactUrl
+      longUrl: this.state.artifactUrl
     })
     .then((resp) => {
       this.setState({
@@ -90,7 +98,7 @@ class Create extends React.Component {
   }
 
   getInstructionMessage() {
-    return <div className={styles.instructions}>Please input the artifact you would like to find as a url.</div>;
+    return <div className={styles.instructions}>Please input the item id of the artifact you would like to generate a QR code for.</div>;
   }
 
   handleResults() {
@@ -100,9 +108,7 @@ class Create extends React.Component {
   }
 
   getQRCode() {
-    console.info(this.state.artifact);
-    console.info(`${config.apiUrl}/get_qrimg/${this.state.artifact.itemId}`);
-    axios.get(`${config.apiUrl}/get_qrimg/${this.state.artifact.itemId}`)
+    axios.get(`${config.apiUrl}/get_qrimg/${this.state.itemId}`)
     .then((resp) => {
       this.setState({
           qrCode: resp.data,
@@ -132,10 +138,8 @@ class Create extends React.Component {
           {message}
           <form onSubmit={this.handleOnSubmit}>
               <div className={styles.searchInputContainer}>
-                <select onChange={this.handleClickDropdown} value={this.state.type}>
-                  <option value="BHL">BHL</option>
-                </select>
-                <input type="text" placeholder={placeholder} value={this.state.itemId} onChange={this.handleOnChange} className={styles.searchInput} />
+                <input type="text" placeholder={placeholder} value={this.state.itemId} onChange={this.handleOnItemIdChange} className={styles.searchInput} />
+                <input type="text" placeholder={placeholder} value={this.state.artifactUrl} onChange={this.handleOnArticleURLChange} className={styles.searchInput} />
                 <input type="submit" value="Save" className={styles.searchButton}/>
               </div>
           </form>
